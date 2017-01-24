@@ -1,0 +1,20 @@
+{
+  "version": "1.0.0-beta-*",
+  "buildOptions": {
+    "debugType": "portable"
+  },
+  "dependencies": {
+    "Newtonsoft.Json": "9.0.1",
+    "Microsoft.Extensions.DependencyModel": "1.1.0",
+    "Microsoft.DotNet.InternalAbstractions": "1.0.0",
+    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0"
+  },
+  "frameworks": {
+    "net451": {},
+    "netstandard1.6": {
+      "dependencies": {
+        "NETStandard.Library": "1.6.1"
+      }
+    }
+  }
+}

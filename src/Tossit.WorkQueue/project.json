@@ -1,0 +1,23 @@
+{
+  "version": "1.0.0-beta-*",
+  "buildOptions": {
+    "debugType": "portable"
+  },
+  "dependencies": {
+    "Tossit.Core": {
+      "target": "project",
+      "version": "1.0.0-beta"
+    },
+    "Microsoft.Extensions.Logging": "1.1.0",
+    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
+    "Microsoft.AspNetCore.Http.Abstractions": "1.1.0"
+  },
+  "frameworks": {
+    "net451": {},
+    "netstandard1.6": {
+      "dependencies": {
+        "NETStandard.Library": "1.6.1"
+      }
+    }
+  }
+}
