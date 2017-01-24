@@ -1,5 +1,5 @@
 # Tossit (beta) #
-[![Build status](https://ci.appveyor.com/api/projects/status/9n48s0tw4h51d0na/branch/master?svg=true)](https://ci.appveyor.com/project/turgayozgur/tossit/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/whuoamx1tb19jbn6/branch/master?svg=true)](https://ci.appveyor.com/project/turgayozgur/tossit/branch/master)
 
 Simple, easy to use library to disturbuted job/worker logic. Disturbuted messages handled by built in [RabbitMQ](https://github.com/rabbitmq/rabbitmq-dotnet-client) implementation.
 ## Installation
