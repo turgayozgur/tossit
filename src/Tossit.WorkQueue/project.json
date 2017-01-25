@@ -1,8 +1,5 @@
 {
   "version": "1.0.0-beta-*",
-  "buildOptions": {
-    "debugType": "portable"
-  },
   "dependencies": {
     "Tossit.Core": {
       "target": "project",

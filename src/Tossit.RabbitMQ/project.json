@@ -1,8 +1,5 @@
 {
   "version": "1.0.0-beta-*",
-  "buildOptions": {
-    "debugType": "portable"
-  },
   "dependencies": {
     "RabbitMQ.Client": "5.0.0-pre2",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",

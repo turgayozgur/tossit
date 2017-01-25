@@ -5,11 +5,14 @@
 # version format
 version: 1.0.0-beta-{build}
 
-# branches to build
-branches:
-  # whitelist
-  only:
-    - master
+#---------------------------------#
+#    environment configuration    #
+#---------------------------------#
+
+# environment variables
+environment:
+  CODECOV_TOKEN: 
+    secure: p0ajkgqnPFc6xmwGcsMGJFXgz++MceXp1MuzGn42fAqjvIIUKPN3alcnHDdlbwSJ
 
 #---------------------------------#
 #       build configuration       #
@@ -26,6 +29,16 @@ build_script:
 #       tests configuration       #
 #---------------------------------#
 
+# scripts to run before tests
+before_test:
+  - nuget install OpenCover -Version 4.6.519 -OutputDirectory .\OpenCover
+
 # to run your custom scripts instead of automatic tests
 test_script:
-  - sh test.sh
+  - sh test.sh appveyor
+
+# scripts to run after tests
+after_test:
+  - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
+  - pip install codecov
+  - codecov -f ".\coverage.xml" -X gcov --token=%CODECOV_TOKEN%

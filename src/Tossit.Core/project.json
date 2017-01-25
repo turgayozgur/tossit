@@ -1,8 +1,5 @@
 {
   "version": "1.0.0-beta-*",
-  "buildOptions": {
-    "debugType": "portable"
-  },
   "dependencies": {
     "Newtonsoft.Json": "9.0.1",
     "Microsoft.Extensions.DependencyModel": "1.1.0",
