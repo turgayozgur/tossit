@@ -1,13 +1,13 @@
-# Tossit (beta) #
+# Tossit #
 [![Build status](https://ci.appveyor.com/api/projects/status/whuoamx1tb19jbn6/branch/master?svg=true)](https://ci.appveyor.com/project/turgayozgur/tossit/branch/master)
 [![codecov](https://codecov.io/gh/turgayozgur/tossit/branch/master/graph/badge.svg)](https://codecov.io/gh/turgayozgur/tossit)
 
-|                                                     Tossit.RabbitMQ                                                     	|                                                      Tossit.WorkQueue                                                     	|
-|:-----------------------------------------------------------------------------------------------------------------------:	|:-------------------------------------------------------------------------------------------------------------------------:	|
-| [![Latest version](https://img.shields.io/nuget/v/Tossit.RabbitMQ.svg)](https://www.nuget.org/packages/Tossit.RabbitMQ) 	| [![Latest version](https://img.shields.io/nuget/v/Tossit.WorkQueue.svg)](https://www.nuget.org/packages/Tossit.WorkQueue) 	|
+| Tossit.WorkQueue | Tossit.RabbitMQ |
+|:-------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------:|
+| [![Latest version](https://img.shields.io/nuget/v/Tossit.WorkQueue.svg)](https://www.nuget.org/packages/Tossit.WorkQueue) | [![Latest version](https://img.shields.io/nuget/v/Tossit.RabbitMQ.svg)](https://www.nuget.org/packages/Tossit.RabbitMQ) |
 
 Simple, easy to use library to disturbuted job/worker logic. Disturbuted messages handled by built in [RabbitMQ](https://github.com/rabbitmq/rabbitmq-dotnet-client) implementation.
-## Installation
+## Installation ##
 You need to install [Tossit.RabbitMQ](https://www.nuget.org/packages/Tossit.RabbitMQ) and [Tossit.WorkQueue](https://www.nuget.org/packages/Tossit.WorkQueue) nuget packages.
 ```
 PM> Install-Package Tossit.RabbitMQ
@@ -45,7 +45,7 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerF
     app.UseTossitWorker();
 }
 ```
-## Job Useage
+## Job Useage ##
 Create new class to sending to worker(s).
 ```csharp
 public class FooData
@@ -117,5 +117,5 @@ public class FooWorker : IWorker<FooData>
     }
 }
 ```
-## License
+## License ##
 The Tossit is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
