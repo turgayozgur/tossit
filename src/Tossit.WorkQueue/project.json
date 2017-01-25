@@ -1,5 +1,27 @@
 {
   "version": "1.0.0-beta-*",
+  "authors": [
+    "Turgay Özgür"
+  ],
+  "copyright": "Copyright (c) 2017 Turgay Özgür",
+  "description": "Library to disturbuted job/worker logic.",
+  "packOptions": {
+    "summary": "Library to disturbuted job/worker logic.",
+    "tags": [
+      "tossit",
+      "disturbuted",
+      "job",
+      "worker",
+      "RabbitMQ",
+      "async"
+    ],
+    "licenseUrl": "https://opensource.org/licenses/MIT",
+    "projectUrl": "https://github.com/turgayozgur/tossit",
+    "repository": {
+      "type": "git",
+      "url": "git://github.com/turgayozgur/tossit"
+    }
+  },
   "dependencies": {
     "Tossit.Core": {
       "target": "project",
