@@ -1,4 +1,5 @@
 # Tossit #
+[![Build Status](https://travis-ci.org/turgayozgur/tossit.svg?branch=master)](https://travis-ci.org/turgayozgur/tossit)
 [![Build status](https://ci.appveyor.com/api/projects/status/whuoamx1tb19jbn6/branch/master?svg=true)](https://ci.appveyor.com/project/turgayozgur/tossit/branch/master)
 [![codecov](https://codecov.io/gh/turgayozgur/tossit/branch/master/graph/badge.svg)](https://codecov.io/gh/turgayozgur/tossit)
 

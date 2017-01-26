@@ -1,0 +1,15 @@
+language: csharp
+
+mono: none
+dotnet: 1.0.0-preview2-1-003177
+
+dist: trusty
+sudo: required
+
+before_script: 
+  - chmod +x build.sh
+  - chmod +x test.sh
+
+script:
+  - ./build.sh netstandard16
+  - ./test.sh
