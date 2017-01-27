@@ -7,7 +7,7 @@
 |:-------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------:|
 | [![Latest version](https://img.shields.io/nuget/v/Tossit.WorkQueue.svg)](https://www.nuget.org/packages/Tossit.WorkQueue) | [![Latest version](https://img.shields.io/nuget/v/Tossit.RabbitMQ.svg)](https://www.nuget.org/packages/Tossit.RabbitMQ) |
 
-Simple, easy to use library to disturbuted job/worker logic. Disturbuted messages handled by built in [RabbitMQ](https://github.com/rabbitmq/rabbitmq-dotnet-client) implementation.
+Simple, easy to use library for disturbuted job/worker logic. Disturbuted messages handled by built in [RabbitMQ](https://github.com/rabbitmq/rabbitmq-dotnet-client) implementation.
 ## Installation ##
 You need to install [Tossit.RabbitMQ](https://www.nuget.org/packages/Tossit.RabbitMQ) and [Tossit.WorkQueue](https://www.nuget.org/packages/Tossit.WorkQueue) nuget packages.
 ```
@@ -32,7 +32,7 @@ public void ConfigureServices(IServiceCollection services)
     services.AddTossitWorker(); 
 }
 ```
-Than, use configure method to configuring RabbitMQ server and prepare workers.
+Then, use configure method to configuring RabbitMQ server and prepare workers.
 ```csharp
 public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
 {
@@ -47,14 +47,14 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerF
 }
 ```
 ## Job Useage ##
-Create new class to sending to worker(s).
+Create a new class to sending to worker(s).
 ```csharp
 public class FooData
 {
     public int Id { get; set; }
 }
 ```
-Create new job class to dispatch data to worker(s).
+Create a new job class to dispatch data to worker(s).
 ```csharp
 public class FooJob : IJob<FooData>
 {
@@ -95,15 +95,15 @@ You can also dispatch a job as async.
 ```csharp
 Task<bool> task = _jobDispatcher.DispatchAsync(new FooJob { Data = new FooData { Id = 1 } });
 ```
-## Worker Useage ##
-Create new class to accepting data sent from jobs.
+## Worker Usage ##
+Create new class to accept the data sent from jobs.
 ```csharp
 public class FooData
 {
     public int Id { get; set; }
 }
 ```
-Create new worker class to process given data.
+Create a new worker class to process given data.
 ```csharp
 public class FooWorker : IWorker<FooData>
 {
