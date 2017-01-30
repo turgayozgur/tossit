@@ -10,7 +10,7 @@ namespace Tossit.WorkerApi.Workers
         public bool Work(FooData data)
         {
             // Lets, do whatever u want by data.
-            Console.WriteLine(data.Id);
+            Console.WriteLine("It worked! id:", data.Id);
 
             // Return true, if working completed successfully.
             return true;

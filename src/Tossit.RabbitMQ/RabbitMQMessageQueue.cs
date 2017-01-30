@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using Tossit.Core;
 
@@ -30,6 +31,10 @@ namespace Tossit.RabbitMQ
         /// ConsumerInvoker field.
         /// </summary>
         private readonly IConsumerInvoker _consumerInvoker;
+        /// <summary>
+        /// SendOptions field.
+        /// </summary>
+        private readonly IOptions<SendOptions> _sendOptions;
 
         /// <summary>
         /// Ctor
@@ -39,18 +44,21 @@ namespace Tossit.RabbitMQ
         /// <param name="channelFactory">IChannelFactory</param>
         /// <param name="eventingBasicConsumerImpl">IEventingBasicConsumerImpl</param>
         /// <param name="consumerInvoker">IConsumerInvoker</param>
+        /// <param name="sendOptions">IOptions{SendOptions}</param>
         public RabbitMQMessageQueue(
             IConnectionWrapper connectionWrapper,
             IJsonConverter jsonConverter,
             IChannelFactory channelFactory,
             IEventingBasicConsumerImpl eventingBasicConsumerImpl,
-            IConsumerInvoker consumerInvoker)
+            IConsumerInvoker consumerInvoker,
+            IOptions<SendOptions> sendOptions)
         {
             _connectionWrapper = connectionWrapper;
             _jsonConverter = jsonConverter;            
             _channelFactory = channelFactory;
             _eventingBasicConsumerImpl = eventingBasicConsumerImpl;
             _consumerInvoker = consumerInvoker;
+            _sendOptions = sendOptions;
         }
 
         /// <summary>
@@ -58,16 +66,12 @@ namespace Tossit.RabbitMQ
         /// </summary>
         /// <param name="name">Name of queue or whatever using to describing work/job/event. Same as Receive method's name.</param>
         /// <param name="message">Message string to sends to queue.</param>
-        /// <param name="options">Options</param>
         /// <returns>Returns true if data send completed successfully, otherwise returns false.</returns>
-        /// <exception cref="Exception">Throws when name or data is null.</exception>>
-        public bool Send(string name, string message, Options options = null)
+        /// <exception cref="ArgumentNullException">Throws when name or message is null.</exception>
+        public bool Send(string name, string message)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
             if (string.IsNullOrWhiteSpace(message)) throw new ArgumentNullException(nameof(message));
-
-            // If options not specified, use default values.
-            if (options == null) options = new Options();
 
             // Create new channel for each dispatch.
             using (var channel = _connectionWrapper.ProducerConnection.CreateModel())
@@ -77,7 +81,7 @@ namespace Tossit.RabbitMQ
                 channel.QueueDeclare(queue: queueName, durable: true, exclusive: false, autoDelete: false);
 
                 // Enable publisher confirms.
-                if (options.ConfirmIsActive)
+                if (_sendOptions.Value.ConfirmReceiptIsActive)
                 {
                     channel.ConfirmSelect();
                 }
@@ -93,9 +97,9 @@ namespace Tossit.RabbitMQ
                     body: body);
 
                 // Wait form ack from worker.
-                if (options.ConfirmIsActive)
+                if (_sendOptions.Value.ConfirmReceiptIsActive)
                 {
-                    channel.WaitForConfirmsOrDie(TimeSpan.FromSeconds(options.ConfirmTimeout));
+                    channel.WaitForConfirmsOrDie(TimeSpan.FromSeconds(_sendOptions.Value.ConfirmReceiptTimeoutSeconds));
                 }
             }
 
@@ -109,7 +113,7 @@ namespace Tossit.RabbitMQ
         /// <param name="name">Name of queue or whatever using to describing work/job/event. Same as Send method's name.</param>
         /// <param name="func">Receiver function.</param>
         /// <returns>Returns true if receiver method registered successfully, otherwise returns false.</returns>
-        /// <exception cref="Exception">Throws when name or func is null.</exception>>
+        /// <exception cref="ArgumentNullException">Throws when name or func is null.</exception>
         public bool Receive(string name, Func<string, bool> func)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));

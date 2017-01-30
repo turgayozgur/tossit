@@ -33,7 +33,7 @@ namespace Tossit.JobApi.Controllers
                 }
             });
 
-            return Ok();
+            return new ObjectResult(new { Id = id, Message = "Yay! Job dispatched." });
         }
     }
 }

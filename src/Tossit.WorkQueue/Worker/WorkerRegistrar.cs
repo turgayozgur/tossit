@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Tossit.Core;
 using Tossit.WorkQueue.Job;
@@ -86,19 +85,6 @@ namespace Tossit.WorkQueue.Worker
             _logger.LogInformation($"Worker {worker.GetType().FullName} successfully registered.");
             
             return true;
-        }
-
-        /// <summary>
-        /// Register worker for accepting jobs as async.
-        /// </summary>
-        /// <typeparam name="TData">Type of data to working on it.</typeparam>
-        /// <param name="worker">Worker instance for registering it.</param>
-        /// <returns>Returns true as Task if registered successfully, otherwise returns false as Task.</returns>
-        public async Task<bool> RegisterAsync<TData>(IWorker<TData> worker) where TData : class
-        {
-            var task = Task.Factory.StartNew(() => Register(worker));
-
-            return await task;
         }
 
         /// <summary>

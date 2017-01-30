@@ -1,18 +1,18 @@
+using Tossit.Core;
 using Xunit;
-using Tossit.WorkQueue.Job;
 
 namespace Tossit.WorkQueue.Tests
 {
-    public class JobOptionsTests
+    public class SendOptionsTests
     {
         [Fact]
         public void GetPublisherConfirmsTimeoutWithoutTimeoutParamShouldReturnTimespan()
         {
             // Arrange
-            var jobOptions = new JobOptions();
+            var sendOptions = new SendOptions();
 
             // Act
-            var result = jobOptions.WorkerConfirmsTimeoutSeconds;
+            var result = sendOptions.ConfirmReceiptTimeoutSeconds;
 
             // Assert
             Assert.True(result == 10);
@@ -22,12 +22,12 @@ namespace Tossit.WorkQueue.Tests
         public void GetPublisherConfirmsTimeoutWithTimeoutParamShouldReturnTimespan()
         {
             // Arrange
-            var jobOptions = new JobOptions{
-                WorkerConfirmsTimeoutSeconds = 30
+            var sendOptions = new SendOptions{
+                ConfirmReceiptTimeoutSeconds = 30
             };
 
             // Act
-            var result = jobOptions.WorkerConfirmsTimeoutSeconds;
+            var result = sendOptions.ConfirmReceiptTimeoutSeconds;
 
             // Assert
             Assert.True(result == 30);

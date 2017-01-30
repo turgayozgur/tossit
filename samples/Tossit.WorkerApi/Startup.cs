@@ -4,9 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Tossit.RabbitMQ;
-using Tossit.WorkerApi.Workers;
 using Tossit.WorkQueue;
-using Tossit.WorkQueue.Worker;
 
 namespace WebApplication
 {

@@ -1,7 +1,5 @@
 ﻿using System;
 using Tossit.Core;
-using Microsoft.Extensions.Options;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
 namespace Tossit.WorkQueue.Job
@@ -20,10 +18,6 @@ namespace Tossit.WorkQueue.Job
         /// </summary>
         private readonly IMessageQueue _messageQueue;
         /// <summary>
-        /// JobOptions field.
-        /// </summary>
-        private readonly IOptions<JobOptions> _jobOptions;
-        /// <summary>
         /// JsonConverter field.
         /// </summary>
         private readonly IJsonConverter _jsonConverter;
@@ -37,18 +31,15 @@ namespace Tossit.WorkQueue.Job
         /// </summary>
         /// <param name="jobNameValidator">IJobNameValidator</param>
         /// <param name="messageQueue">IMessageQueue</param>
-        /// <param name="jobOptions">IOptions{JobOptions}</param>
         /// <param name="jsonConverter">IJsonConverter</param>
         /// <param name="logger">ILogger{JobDispatcher}</param>
         public JobDispatcher(IJobNameValidator jobNameValidator,
             IMessageQueue messageQueue,
-            IOptions<JobOptions> jobOptions,
             IJsonConverter jsonConverter,
             ILogger<JobDispatcher> logger)
         {
             _jobNameValidator = jobNameValidator;
             _messageQueue = messageQueue;
-            _jobOptions = jobOptions;
             _jsonConverter = jsonConverter;
             _logger = logger;
         }
@@ -66,13 +57,8 @@ namespace Tossit.WorkQueue.Job
 
             try
             {
-                var result = _messageQueue.Send(
-                    job.Name, 
-                    _jsonConverter.Serialize(job.Data), 
-                    new Tossit.Core.Options { 
-                        ConfirmIsActive = _jobOptions.Value.WorkerConfirmsIsActive,
-                        ConfirmTimeout = _jobOptions.Value.WorkerConfirmsTimeoutSeconds
-                    });
+                // Send.
+                var result = _messageQueue.Send(job.Name, _jsonConverter.Serialize(job.Data));
 
                 // Log, if could not be dispatched.
                 if (!result)
@@ -95,20 +81,6 @@ namespace Tossit.WorkQueue.Job
             }
 
             return true;
-        }
-
-        /// <summary>
-        /// Dispatch job as async.
-        /// </summary>
-        /// <typeparam name="TData">Type of data to send to worker.</typeparam>
-        /// <param name="job">Job instance to dispatch.</param>
-        /// <returns>If job dispatched successfully, returns true as Task, otherwise returns false as Task.</returns>
-        /// <exception cref="Exception">Throws when job could not be dispatched.</exception>>
-        public async Task<bool> DispatchAsync<TData>(IJob<TData> job) where TData : class
-        {
-            var task = Task.Factory.StartNew(() => Dispatch(job));
-
-            return await task;
         }
 
         /// <summary>

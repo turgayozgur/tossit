@@ -5,7 +5,6 @@ using Tossit.Core;
 using Microsoft.Extensions.Logging;
 using Tossit.WorkQueue.Job;
 using Tossit.WorkQueue.Worker;
-using System.Threading.Tasks;
 
 namespace Tossit.WorkQueue.Tests
 {
@@ -46,22 +45,6 @@ namespace Tossit.WorkQueue.Tests
 
             // Assert
             Assert.True(result);
-        }
-
-        [Fact]
-        public void RegisterAsyncByValidWorkerShouldReturnTrue()
-        {
-            // Arrange
-            var workerRegistrar = GetWorkerRegistrar();
-
-            var worker = new FooWorker(VALID_JOB_NAME);
-
-            // Act
-            var task = Task.Run(() => workerRegistrar.RegisterAsync(worker));
-            task.Wait();
-
-            // Assert
-            Assert.True(task.Result);
         }
 
         [Fact]

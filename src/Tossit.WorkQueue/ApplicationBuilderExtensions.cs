@@ -35,7 +35,7 @@ namespace Tossit.WorkQueue
             foreach (var worker in workers)
             {
                 // Maybe, register all of them on servicecollectionextension and than register here?
-                reflectionHelper.InvokeGenericMethod(nameof(workerRegistrar.RegisterAsync), workerRegistrar, worker, typeof(IWorker<>));
+                reflectionHelper.InvokeGenericMethod(nameof(workerRegistrar.Register), workerRegistrar, worker, typeof(IWorker<>));
             }
         }
     }

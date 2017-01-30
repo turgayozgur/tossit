@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Moq;
 using Tossit.Core;
 using Tossit.WorkQueue.Job;
@@ -15,7 +13,6 @@ namespace Tossit.WorkQueue.Tests
 
         private readonly Mock<IJobNameValidator> _jobNameValidator;
         private readonly Mock<IMessageQueue> _messageQueue;
-        private readonly Mock<IOptions<JobOptions>> _jobOptions;
         private readonly Mock<IJsonConverter> _jsonConverter;
         private readonly Mock<ILogger<JobDispatcher>> _logger;
 
@@ -25,14 +22,10 @@ namespace Tossit.WorkQueue.Tests
             _jobNameValidator.Setup(x => x.Validate(It.IsAny<string>())).Returns(true);
 
             _messageQueue = new Mock<IMessageQueue>();
-            _messageQueue.Setup(x => x.Send(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Tossit.Core.Options>()))
-                .Returns(true);
+            _messageQueue.Setup(x => x.Send(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
 
             _jsonConverter = new Mock<IJsonConverter>();
             _jsonConverter.Setup(x => x.Serialize<FooData>(It.IsAny<FooData>())).Returns("{id:1}");
-
-            _jobOptions = new Mock<IOptions<JobOptions>>();
-            _jobOptions.Setup(x => x.Value.WorkerConfirmsTimeoutSeconds).Returns(It.IsAny<int>());
 
             _logger = new Mock<ILogger<JobDispatcher>>();
         }
@@ -53,22 +46,6 @@ namespace Tossit.WorkQueue.Tests
         }
 
         [Fact]
-        public void DispatchAsyncByValidJobShouldReturnTrue()
-        {
-            // Arrange
-            var jobDispatcher = GetJobDispatcher();
-
-            var job = new FooJob(VALID_JOB_NAME, new FooData());
-
-            // Act
-            var task = Task.Run(() => jobDispatcher.DispatchAsync(job));
-            task.Wait();
-
-            // Assert
-            Assert.True(task.Result);
-        }
-
-        [Fact]
         public void DispatchByAnyJobIfSendReturnsFalseShouldReturnFalse()
         {
             // Arrange
@@ -76,8 +53,7 @@ namespace Tossit.WorkQueue.Tests
 
             var job = new FooJob(VALID_JOB_NAME, new FooData());
 
-            _messageQueue.Setup(x => x.Send(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Tossit.Core.Options>()))
-                .Returns(false);
+            _messageQueue.Setup(x => x.Send(It.IsAny<string>(), It.IsAny<string>())).Returns(false);
 
             // Act
             var result = jobDispatcher.Dispatch(job);
@@ -94,8 +70,7 @@ namespace Tossit.WorkQueue.Tests
 
             var job = new FooJob(VALID_JOB_NAME, new FooData());
 
-            _messageQueue.Setup(x => x.Send(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Tossit.Core.Options>()))
-                .Throws<Exception>();
+            _messageQueue.Setup(x => x.Send(It.IsAny<string>(), It.IsAny<string>())).Throws<Exception>();
 
             // Act
             // Assert
@@ -147,7 +122,6 @@ namespace Tossit.WorkQueue.Tests
         {
             return new JobDispatcher(_jobNameValidator.Object,
                 _messageQueue.Object,
-                _jobOptions.Object,
                 _jsonConverter.Object,
                 _logger.Object);
         }

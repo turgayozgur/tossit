@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Extensions.Options;
 using Moq;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -16,6 +17,7 @@ namespace Tossit.RabbitMQ.Tests
         private readonly Mock<IConnectionWrapper> _connectionWrapper;
         private readonly Mock<IJsonConverter> _jsonConverter;
         private readonly Mock<IModel> _channel;
+        private readonly Mock<IOptions<SendOptions>> _sendOptions;
 
         public RabbitMQMessageQueueTests()
         {
@@ -39,6 +41,10 @@ namespace Tossit.RabbitMQ.Tests
 
             _jsonConverter = new Mock<IJsonConverter>();
             _jsonConverter.Setup(x => x.Serialize(It.IsAny<object>())).Returns("{id:1}");
+
+            _sendOptions = new Mock<IOptions<SendOptions>>();
+            _sendOptions.Setup(x => x.Value.ConfirmReceiptTimeoutSeconds).Returns(It.IsAny<int>());
+            _sendOptions.Setup(x => x.Value.ConfirmReceiptIsActive).Returns(false);
         }
 
         [Fact]
@@ -60,11 +66,10 @@ namespace Tossit.RabbitMQ.Tests
             // Arrange
             var rabbitMQMessageQueue = GetRabbitMQMessageQueue();
 
+            _sendOptions.Setup(x => x.Value.ConfirmReceiptIsActive).Returns(true);
+
             // Act
-            var result = rabbitMQMessageQueue.Send("queue.name", "Data here", new Tossit.Core.Options()
-            {
-                ConfirmIsActive = true
-            });
+            var result = rabbitMQMessageQueue.Send("queue.name", "Data here");
 
             // Assert
             _channel.Verify(x => x.ConfirmSelect(), Times.Once);
@@ -76,11 +81,10 @@ namespace Tossit.RabbitMQ.Tests
             // Arrange
             var rabbitMQMessageQueue = GetRabbitMQMessageQueue();
 
+            _sendOptions.Setup(x => x.Value.ConfirmReceiptIsActive).Returns(true);
+
             // Act
-            var result = rabbitMQMessageQueue.Send("queue.name", "Data here", new Tossit.Core.Options()
-            {
-                ConfirmIsActive = true
-            });
+            var result = rabbitMQMessageQueue.Send("queue.name", "Data here");
 
             // Assert
             _channel.Verify(x => x.WaitForConfirmsOrDie(It.IsAny<TimeSpan>()), Times.Once);
@@ -150,7 +154,8 @@ namespace Tossit.RabbitMQ.Tests
                 _jsonConverter.Object,
                 _channelFactory.Object,
                 _eventingBasicConsumerImpl.Object,
-                _consumerInvoker.Object
+                _consumerInvoker.Object,
+                _sendOptions.Object
             );
         }
     }

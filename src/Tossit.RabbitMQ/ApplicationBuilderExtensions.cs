@@ -41,8 +41,19 @@ namespace Tossit.RabbitMQ
             // Set server uri, if specified.
             if (!string.IsNullOrWhiteSpace(uri))
             {
-                var connectionFactory = services.GetRequiredService<IConnectionFactory>();
-                ((ConnectionFactory)connectionFactory).SetUri(new Uri(uri));
+                var service = services.GetRequiredService<IConnectionFactory>();
+                var connectionFactory = ((ConnectionFactory)service);
+
+                // Set RabbitMQ server uri.
+                connectionFactory.SetUri(new Uri(uri));
+
+                // The automatic recovery process for many applications follows the following steps:
+                // Reconnect, Restore connection listeners,
+                // Re-open channels, Restore channel listeners,
+                // Restore channel basic.qos setting, publisher confirms and transaction settings
+                // NetworkRecoveryInterval is 5 seconds by default.
+                connectionFactory.AutomaticRecoveryEnabled = true;
+                // Topology recovery is enabled by default.
             }
         }
     }

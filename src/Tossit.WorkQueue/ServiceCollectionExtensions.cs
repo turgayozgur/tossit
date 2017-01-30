@@ -15,9 +15,9 @@ namespace Tossit.WorkQueue
         /// Register tossit job dependencies.
         /// </summary>
         /// <param name="services">IServiceCollection</param>
-        /// <param name="configure">Action{JobOptions}</param>
+        /// <param name="configure">Action{Options}</param>
         /// <exception cref="System.ArgumentNullException"></exception>
-        public static void AddTossitJob(this IServiceCollection services, Action<JobOptions> configure = null)
+        public static void AddTossitJob(this IServiceCollection services, Action<SendOptions> configure = null)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
 
