@@ -26,8 +26,7 @@
     "Microsoft.AspNetCore.Http.Abstractions": "1.1.0",
     "Microsoft.AspNetCore.Hosting.Abstractions": "1.1.0",
     "Tossit.Core": {
-      "target": "project",
-      "version": "1.0.0-beta"
+      "target": "project"
     }
   },
   "frameworks": {

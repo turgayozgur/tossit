@@ -24,8 +24,7 @@
   },
   "dependencies": {
     "Tossit.Core": {
-      "target": "project",
-      "version": "1.0.0-beta"
+      "target": "project"
     },
     "Microsoft.Extensions.Logging": "1.1.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",

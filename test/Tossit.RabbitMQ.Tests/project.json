@@ -6,12 +6,10 @@
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "Moq": "4.6.38-alpha",
     "Tossit.Core": {
-      "target": "project",
-      "version": "1.0.0-beta"
+      "target": "project"
     },
     "Tossit.RabbitMQ": {
-      "target": "project",
-      "version": "1.0.0-beta"
+      "target": "project"
     },
     "RabbitMQ.Client": "5.0.0-pre2"
   },

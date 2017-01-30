@@ -17,12 +17,10 @@
     "Microsoft.Extensions.Logging.Debug": "1.1.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
     "Tossit.WorkQueue": {
-      "target": "project",
-      "version": "1.0.0-beta"
+      "target": "project"
     },
     "Tossit.RabbitMQ": {
-      "target": "project",
-      "version": "1.0.0-beta"
+      "target": "project"
     }
   },
 
