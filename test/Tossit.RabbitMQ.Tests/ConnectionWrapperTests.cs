@@ -53,7 +53,7 @@ namespace Tossit.RabbitMQ.Tests
             connectionWrapper.Dispose();
 
             // Assert
-            conection.Verify(x => x.Abort(), Times.Never);
+            conection.Verify(x => x.Close(), Times.Never);
         }
 
         [Fact]
@@ -70,7 +70,7 @@ namespace Tossit.RabbitMQ.Tests
             connectionWrapper.Dispose();
 
             // Assert
-            conection.Verify(x => x.Abort(), Times.Once);
+            conection.Verify(x => x.Close(), Times.Once);
         }
 
         [Fact]
@@ -87,7 +87,7 @@ namespace Tossit.RabbitMQ.Tests
             connectionWrapper.Dispose();
 
             // Assert
-            conection.Verify(x => x.Abort(), Times.Once);
+            conection.Verify(x => x.Close(), Times.Once);
         }
     }
 }

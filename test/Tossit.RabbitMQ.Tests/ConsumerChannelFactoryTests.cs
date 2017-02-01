@@ -48,7 +48,7 @@ namespace Tossit.RabbitMQ.Tests
             consumerChannelFactory.Dispose();
 
             // Assert
-            channel.Verify(x => x.Abort(), Times.Exactly(2));
+            channel.Verify(x => x.Close(), Times.Exactly(2));
         }
     }
 }

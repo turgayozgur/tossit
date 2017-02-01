@@ -50,7 +50,7 @@ namespace Tossit.RabbitMQ
         {
             foreach (var channel in _channels)
             {
-                channel.Abort();
+                channel.Close();
             }
         }
     }

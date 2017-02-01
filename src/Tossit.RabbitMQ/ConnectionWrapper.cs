@@ -42,8 +42,8 @@ namespace Tossit.RabbitMQ
         /// </summary>
         public void Dispose()
         {
-            if (_producerConnection.IsValueCreated) ProducerConnection.Abort();
-            if (_consumerConnection.IsValueCreated) ConsumerConnection.Abort();
+            if (_producerConnection.IsValueCreated) ProducerConnection.Close();
+            if (_consumerConnection.IsValueCreated) ConsumerConnection.Close();
         }
     }
 }
