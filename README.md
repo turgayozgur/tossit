@@ -91,10 +91,6 @@ public class AnyController : Controller
     }
 }
 ```
-You can also dispatch a job as async.
-```csharp
-Task<bool> task = _jobDispatcher.DispatchAsync(new FooJob { Data = new FooData { Id = 1 } });
-```
 ## Worker Usage ##
 Create new class to accept the data sent from jobs.
 ```csharp
