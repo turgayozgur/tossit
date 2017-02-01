@@ -8,5 +8,6 @@ projectFile="project.json"
 revision=$(printf %04d $revision)
 
 # pack
-dotnet pack ./src/Tossit.RabbitMQ -c Debug -o ./artifacts --version-suffix=$revision --no-build
-dotnet pack ./src/Tossit.WorkQueue -c Debug -o ./artifacts --version-suffix=$revision --no-build
+for path in src/*; do
+    dotnet pack ${path} -c Debug -o ./artifacts --version-suffix=$revision --no-build
+done
