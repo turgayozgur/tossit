@@ -1,7 +1,7 @@
 using System;
 using Tossit.WorkQueue.Worker;
 
-namespace Tossit.WorkerApi.Workers
+namespace Tossit.Worker.Api.Workers
 {
     public class FooWorker : IWorker<FooData>
     {
@@ -10,7 +10,7 @@ namespace Tossit.WorkerApi.Workers
         public bool Work(FooData data)
         {
             // Lets, do whatever u want by data.
-            Console.WriteLine("It worked! id:", data.Id);
+            Console.WriteLine($"Yep! It worked. id: {data.Id}");
 
             // Return true, if working completed successfully.
             return true;

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Tossit.RabbitMQ;
 using Tossit.WorkQueue;
 
-namespace Tossit.WorkerApi
+namespace Tossit.Worker.Api
 {
     public class Startup
     {

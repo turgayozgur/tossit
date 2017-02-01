@@ -1,4 +1,4 @@
-namespace Tossit.WorkerApi.Workers
+namespace Tossit.Worker.Api.Workers
 {
     public class FooData
     {

@@ -16,7 +16,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Tossit.JobApi": {
+    "Tossit.Job.Api": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "http://localhost:5001/api/values",

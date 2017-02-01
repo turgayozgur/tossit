@@ -17,7 +17,7 @@ if [ "${target}" == "appveyor" ]; then
         ".\OpenCover\OpenCover.4.6.519\tools\OpenCover.Console.exe" \
         -oldstyle \
         -target:"C:\Program Files\dotnet\dotnet.exe" \
-        -filter:"+[Tossit.*]* -[*.Tests]* -[*]*.JobApi.* -[*]*.WorkerApi.*" \
+        -filter:"+[Tossit.*]* -[*.Tests]* -[*]*.Api.*" \
         -targetargs:"test ${path}" \
         -mergeoutput -output:coverage.xml -register:user
     done

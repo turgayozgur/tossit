@@ -1,8 +1,9 @@
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 
-namespace Tossit.WorkerApi
+namespace Tossit.Job.Api
 {
     public class Program
     {

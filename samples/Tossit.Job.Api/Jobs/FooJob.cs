@@ -1,6 +1,6 @@
 using Tossit.WorkQueue.Job;
 
-namespace Tossit.JobApi.Jobs
+namespace Tossit.Job.Api.Jobs
 {
     public class FooJob : IJob<FooData>
     {

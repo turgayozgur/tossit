@@ -1,9 +1,9 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
-using Tossit.JobApi.Jobs;
+using Tossit.Job.Api.Jobs;
 using Tossit.WorkQueue.Job;
 
-namespace Tossit.JobApi.Controllers
+namespace Tossit.Job.Api.Controllers
 {
     [Route("api/[controller]")]
     public class JobController : Controller

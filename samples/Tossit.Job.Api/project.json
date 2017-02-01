@@ -60,6 +60,6 @@
   },
 
   "tooling": {
-    "defaultNamespace": "Tossit.JobApi"
+    "defaultNamespace": "Tossit.Job.Api"
   }
 }

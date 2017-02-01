@@ -8,6 +8,6 @@ RUN ["bash", "build.sh", "netstandard16"]
 
 EXPOSE 5001/tcp
 
-WORKDIR /workerApp/samples/Tossit.WorkerApi
+WORKDIR /workerApp/samples/Tossit.Worker.Api
 
 CMD ["dotnet", "run", "--server.urls", "http://*:5001"]
