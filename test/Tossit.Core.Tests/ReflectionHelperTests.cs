@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -7,29 +8,29 @@ namespace Tossit.Core.Tests
     public class ReflectionHelperTests
     {
         [Fact]
-        public void GetImplementationsByInterfaceTypeShouldReturnInstances()
+        public void GetTypesThatImplementedByInterfaceShouldReturnTypes()
         {
             // Arrange
             var reflectionHelper = new ReflectionHelper();
 
             // Act
-            var result = reflectionHelper.GetImplementationsByInterfaceType(typeof(IBarInterface<>));
+            var result = reflectionHelper.GetTypesThatImplementedByInterface(typeof(IBarInterface<>));
 
             // Assert
             Assert.True(result.All(x => x is IBarInterface<string>));
         }
 
         [Fact]
-        public void GetImplementationsByInterfaceByNonExistingInterfaceTypeShouldReturnDefault()
+        public void GetTypesThatImplementedByInterfaceByNonExistingInterfaceTypeShouldReturnEmptyList()
         {
             // Arrange
             var reflectionHelper = new ReflectionHelper();
 
             // Act
-            var result = reflectionHelper.GetImplementationsByInterfaceType(typeof(IFooInterface<>));
+            var result = reflectionHelper.GetTypesThatImplementedByInterface(typeof(IFooInterface<>));
 
             // Assert
-            Assert.True(result.Count == 0);
+            Assert.True(result.ToList().Count == 0);
         }
 
         [Fact]
@@ -121,6 +122,50 @@ namespace Tossit.Core.Tests
             // Assert
             Assert.Throws(typeof(ArgumentNullException),
                 () => reflectionHelper.InvokeGenericMethod("BarMethod", barClass, parameter, null));
+        }
+
+        [Fact]
+        public void FilterObjectsByInterfaceShouldReturnFilteredObjects()
+        {
+            // Arrange
+            var reflectionHelper = new ReflectionHelper();
+
+            // Act
+            var result = reflectionHelper.FilterObjectsByInterface(new List<object>
+            {
+                new FooClass(),
+                new BarClass()
+            }, typeof(IBarInterface<string>));
+
+            // Assert
+            Assert.True(result.Count() == 1);
+        }
+
+        [Fact]
+        public void FilterObjectsByInterfaceWithNonExistingObjectsShouldReturnEmptyList()
+        {
+            // Arrange
+            var reflectionHelper = new ReflectionHelper();
+
+            // Act
+            var result = reflectionHelper.FilterObjectsByInterface(new List<object>
+            {
+                new BarClass()
+            }, typeof(IBarInterface<string>));
+
+            // Assert
+            Assert.True(result.Count() == 0);
+        }
+
+        [Fact]
+        public void FilterObjectsByInterfaceWithNullObjectsShouldThrowArgumentNullException()
+        {
+            // Arrange
+            var reflectionHelper = new ReflectionHelper();
+
+            // Assert
+            Assert.Throws(typeof(ArgumentNullException),
+                () => reflectionHelper.FilterObjectsByInterface<string>(null, typeof(void)));
         }
 
         public class FooClass : IBarInterface<string>

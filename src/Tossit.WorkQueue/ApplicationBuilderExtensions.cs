@@ -23,20 +23,33 @@ namespace Tossit.WorkQueue
 
             var services = app.ApplicationServices;
 
-            // Get worker registrar.
+            // Get required services.
             var workerRegistrar = services.GetRequiredService<IWorkerRegistrar>();
-            if (workerRegistrar == null) throw new InvalidOperationException("Unable to find the required services.");
-
-            // Get workers.
             var reflectionHelper = services.GetRequiredService<IReflectionHelper>();
-            var workers = reflectionHelper.GetImplementationsByInterfaceType(typeof(IWorker<>));
-            
-            // Register workers.
-            foreach (var worker in workers)
+
+            if (workerRegistrar == null || reflectionHelper == null)
             {
-                // Maybe, register all of them on servicecollectionextension and than register here?
-                reflectionHelper.InvokeGenericMethod(nameof(workerRegistrar.Register), workerRegistrar, worker, typeof(IWorker<>));
+                throw new InvalidOperationException("Unable to find the required services. AddTossitWorker() should be called.");
             }
+
+            // Get consumers.
+            var consumers = services.GetServices<IConsumer>();
+            if (consumers != null)
+            {
+                // Get workers.
+                var workers = reflectionHelper.FilterObjectsByInterface(consumers, typeof(IWorker<>));
+
+                // Register workers.
+                foreach (var worker in workers)
+                {
+                    // Maybe, register all of them on servicecollectionextension and than register here?
+                    reflectionHelper.InvokeGenericMethod(
+                        nameof(workerRegistrar.Register), 
+                        workerRegistrar, 
+                        worker, 
+                        typeof(IWorker<>));
+                }
+            }            
         }
     }
 }
