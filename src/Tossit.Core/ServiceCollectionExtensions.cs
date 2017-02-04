@@ -18,7 +18,8 @@ namespace Tossit.Core
             if (services == null) throw new ArgumentNullException(nameof(services));
 
             services.AddScoped<IJsonConverter, JsonConverter>();
-            services.AddSingleton<IReflectionHelper, ReflectionHelper>();
+            services.AddScoped<IDependencyContextProxy, DependencyContextProxy>();
+            services.AddSingleton<IReflectionHelper, ReflectionHelper>();            
         }
     }
 }
