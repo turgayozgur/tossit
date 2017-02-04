@@ -14,6 +14,9 @@ namespace Tossit.Core.Tests
         public ReflectionHelperTests()
         {
             _dependencyContextProxy = new Mock<IDependencyContextProxy>();
+
+            _dependencyContextProxy.Setup(x => x.GetDefaultAssemblyNames())
+                .Returns(new List<AssemblyName> { new AssemblyName("Tossit.Core.Tests") });
         }
 
         [Fact]
