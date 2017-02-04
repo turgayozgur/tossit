@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Microsoft.Extensions.DependencyModel;
 
 namespace Tossit.Core
 {
@@ -18,10 +17,18 @@ namespace Tossit.Core
         private readonly IList<Assembly> _assemblies = new List<Assembly>();
 
         /// <summary>
+        /// DependencyContextProxy field.
+        /// </summary>
+        private readonly IDependencyContextProxy _dependencyContextProxy;
+
+        /// <summary>
         /// Ctor
         /// </summary>
-        public ReflectionHelper()
+        /// <param name="dependencyContextProxy">IDependencyContextProxy</param>
+        public ReflectionHelper(IDependencyContextProxy dependencyContextProxy)
         {
+            _dependencyContextProxy = dependencyContextProxy;
+
             this.LoadAssemblies();
         }
 
@@ -118,10 +125,8 @@ namespace Tossit.Core
         /// </summary>
         private void LoadAssemblies()
         {
-            var context = DependencyContext.Default;
-
             // Find assembly names without ignored ones.
-            var assemblyNames = context.GetDefaultAssemblyNames()
+            var assemblyNames = _dependencyContextProxy.GetDefaultAssemblyNames()
                 .Where(an => !_ignoredNames.Any(n => an.Name.StartsWith(n)));
 
             // Load all found assemblies.

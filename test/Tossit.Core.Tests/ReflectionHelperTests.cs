@@ -1,17 +1,26 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using Moq;
 using Xunit;
 
 namespace Tossit.Core.Tests
 {
     public class ReflectionHelperTests
     {
+        private readonly Mock<IDependencyContextProxy> _dependencyContextProxy;
+
+        public ReflectionHelperTests()
+        {
+            _dependencyContextProxy = new Mock<IDependencyContextProxy>();
+        }
+
         [Fact]
         public void GetTypesThatImplementedByInterfaceShouldReturnTypes()
         {
             // Arrange
-            var reflectionHelper = new ReflectionHelper();
+            var reflectionHelper = GetReflectionHelper();
 
             // Act
             var result = reflectionHelper.GetTypesThatImplementedByInterface(typeof(IBarInterface<>));
@@ -24,7 +33,7 @@ namespace Tossit.Core.Tests
         public void GetTypesThatImplementedByInterfaceByNonExistingInterfaceTypeShouldReturnEmptyList()
         {
             // Arrange
-            var reflectionHelper = new ReflectionHelper();
+            var reflectionHelper = GetReflectionHelper();
 
             // Act
             var result = reflectionHelper.GetTypesThatImplementedByInterface(typeof(IFooInterface<>));
@@ -37,7 +46,7 @@ namespace Tossit.Core.Tests
         public void InvokeGenericMethodShouldCallGivenMethod()
         {
             // Arrange
-            var reflectionHelper = new ReflectionHelper();
+            var reflectionHelper = GetReflectionHelper();
             var barClass = new BarClass();
             var parameter = new FooClass { Data = "test" };
 
@@ -52,7 +61,7 @@ namespace Tossit.Core.Tests
         public void InvokeGenericMethodByNotExistingMethodShouldThrowInvalidOperationException()
         {
             // Arrange
-            var reflectionHelper = new ReflectionHelper();
+            var reflectionHelper = GetReflectionHelper();
             var barClass = new BarClass();
             var parameter = new FooClass { Data = "test" };
 
@@ -65,7 +74,7 @@ namespace Tossit.Core.Tests
         public void InvokeGenericMethodByInvalidInterfaceTypeShouldThrowInvalidOperationException()
         {
             // Arrange
-            var reflectionHelper = new ReflectionHelper();
+            var reflectionHelper = GetReflectionHelper();
             var barClass = new BarClass();
             var parameter = new FooClass { Data = "test" };
 
@@ -78,7 +87,7 @@ namespace Tossit.Core.Tests
         public void InvokeGenericMethodByNullOrWhitespaceNameShouldThrowArgumentNullException()
         {
             // Arrange
-            var reflectionHelper = new ReflectionHelper();
+            var reflectionHelper = GetReflectionHelper();
             var barClass = new BarClass();
             var parameter = new FooClass { Data = "test" };
 
@@ -91,7 +100,7 @@ namespace Tossit.Core.Tests
         public void InvokeGenericMethodByNullObjShouldThrowArgumentNullException()
         {
             // Arrange
-            var reflectionHelper = new ReflectionHelper();
+            var reflectionHelper = GetReflectionHelper();
             var parameter = new FooClass { Data = "test" };
 
             // Assert
@@ -103,7 +112,7 @@ namespace Tossit.Core.Tests
         public void InvokeGenericMethodByNullParameterShouldThrowArgumentNullException()
         {
             // Arrange
-            var reflectionHelper = new ReflectionHelper();
+            var reflectionHelper = GetReflectionHelper();
             var barClass = new BarClass();
 
             // Assert
@@ -115,7 +124,7 @@ namespace Tossit.Core.Tests
         public void InvokeGenericMethodByNullGenericInterfaceTypeShouldThrowArgumentNullException()
         {
             // Arrange
-            var reflectionHelper = new ReflectionHelper();
+            var reflectionHelper = GetReflectionHelper();
             var barClass = new BarClass();
             var parameter = new FooClass { Data = "test" };
 
@@ -128,7 +137,7 @@ namespace Tossit.Core.Tests
         public void FilterObjectsByInterfaceShouldReturnFilteredObjects()
         {
             // Arrange
-            var reflectionHelper = new ReflectionHelper();
+            var reflectionHelper = GetReflectionHelper();
 
             // Act
             var result = reflectionHelper.FilterObjectsByInterface(new List<object>
@@ -145,7 +154,7 @@ namespace Tossit.Core.Tests
         public void FilterObjectsByInterfaceWithNonExistingObjectsShouldReturnEmptyList()
         {
             // Arrange
-            var reflectionHelper = new ReflectionHelper();
+            var reflectionHelper = GetReflectionHelper();
 
             // Act
             var result = reflectionHelper.FilterObjectsByInterface(new List<object>
@@ -161,11 +170,31 @@ namespace Tossit.Core.Tests
         public void FilterObjectsByInterfaceWithNullObjectsShouldThrowArgumentNullException()
         {
             // Arrange
-            var reflectionHelper = new ReflectionHelper();
+            var reflectionHelper = GetReflectionHelper();
 
             // Assert
             Assert.Throws(typeof(ArgumentNullException),
                 () => reflectionHelper.FilterObjectsByInterface<string>(null, typeof(void)));
+        }
+
+        [Fact]
+        public void LoadAssembliesWithExceptionalAssemblyNameShouldIgnoreException()
+        {
+            // Arrange
+            // Set any nonexisting assembly name for get exception when load that.
+            _dependencyContextProxy.Setup(x => x.GetDefaultAssemblyNames())
+                .Returns(new List<AssemblyName> { new AssemblyName("AnyNotExistingAssemblyName11") });
+
+            // Act
+            var reflectionHelper = GetReflectionHelper();
+
+            // Assert
+            Assert.True(reflectionHelper != null);
+        }
+
+        private ReflectionHelper GetReflectionHelper()
+        {
+            return new ReflectionHelper(_dependencyContextProxy.Object);
         }
 
         public class FooClass : IBarInterface<string>

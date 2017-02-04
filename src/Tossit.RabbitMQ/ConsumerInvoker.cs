@@ -22,15 +22,26 @@ namespace Tossit.RabbitMQ
             var body = ea.Body != null ? Encoding.UTF8.GetString(ea.Body) : string.Empty;
 
             // Invoke!
-            var isSuccess = func(body);
+            bool isSuccess;
+
+            try
+            {
+                isSuccess = func(body);
+            }
+            catch
+            {
+                isSuccess = false;
+            }
 
             // Ack or nack.
             if (isSuccess)
             {
+                Console.WriteLine("ack");
                 channel.BasicAck(ea.DeliveryTag, multiple: false);
             }
             else
             {
+                Console.WriteLine("nack");
                 channel.BasicNack(ea.DeliveryTag, multiple: false, requeue: true);
             }
         }

@@ -47,7 +47,8 @@ namespace Tossit.WorkQueue
             services.AddSingleton<IWorkerRegistrar, WorkerRegistrar>();
 
             // Add workers as singleton.
-            var workerTypes = new ReflectionHelper().GetTypesThatImplementedByInterface(typeof(IWorker<>));
+            var workerTypes = new ReflectionHelper(new DependencyContextProxy())
+                .GetTypesThatImplementedByInterface(typeof(IWorker<>));
 
             foreach (var workerType in workerTypes)
             {

@@ -1,3 +1,4 @@
+using System;
 using Moq;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -37,6 +38,19 @@ namespace Tossit.RabbitMQ.Tests
 
             // Act
             consumerInvoker.Invoke((str) => { return false; }, _basicDeliverEventArgs.Object, _model.Object);
+
+            // Assert
+            _model.Verify(x => x.BasicNack(It.IsAny<ulong>(), false, true), Times.Once);
+        }
+
+        [Fact]
+        public void InvokeByExceptionalFuncShouldHitBasicNack()
+        {
+            // Arrange
+            var consumerInvoker = new ConsumerInvoker();
+
+            // Act
+            consumerInvoker.Invoke((str) => { throw new Exception(); }, _basicDeliverEventArgs.Object, _model.Object);
 
             // Assert
             _model.Verify(x => x.BasicNack(It.IsAny<ulong>(), false, true), Times.Once);
