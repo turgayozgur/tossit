@@ -11,9 +11,7 @@
       "tossit",
       "disturbuted",
       "job",
-      "worker",
-      "RabbitMQ",
-      "async"
+      "worker"
     ],
     "licenseUrl": "https://opensource.org/licenses/MIT",
     "projectUrl": "https://github.com/turgayozgur/tossit",

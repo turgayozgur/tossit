@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Text;
 using Microsoft.Extensions.Options;
 using Moq;
 using RabbitMQ.Client;
@@ -11,7 +13,6 @@ namespace Tossit.RabbitMQ.Tests
     public class RabbitMQMessageQueueTests
     {
         private readonly Mock<IChannelFactory> _channelFactory;
-        private readonly Mock<IConsumerInvoker> _consumerInvoker;
         private readonly Mock<EventingBasicConsumer> _eventingBasicConsumer;
         private readonly Mock<IEventingBasicConsumerImpl> _eventingBasicConsumerImpl;
         private readonly Mock<IConnectionWrapper> _connectionWrapper;
@@ -36,8 +37,6 @@ namespace Tossit.RabbitMQ.Tests
             _eventingBasicConsumerImpl = new Mock<IEventingBasicConsumerImpl>();
             _eventingBasicConsumer = new Mock<EventingBasicConsumer>(Mock.Of<IModel>());
             _eventingBasicConsumerImpl.Setup(x => x.GetEventingBasicConsumer(It.IsAny<IModel>())).Returns(_eventingBasicConsumer.Object);
-
-            _consumerInvoker = new Mock<IConsumerInvoker>();
 
             _jsonConverter = new Mock<IJsonConverter>();
             _jsonConverter.Setup(x => x.Serialize(It.IsAny<object>())).Returns("{id:1}");
@@ -147,6 +146,102 @@ namespace Tossit.RabbitMQ.Tests
             Assert.Throws<ArgumentNullException>(() => rabbitMQMessageQueue.Receive("queue.name", null));
         }
 
+        [Fact]
+        public void InvokeWithExceptionalResultShouldHitBasicPublish()
+        {
+            // Arrange
+            var rabbitMQMessageQueue = GetRabbitMQMessageQueue();
+            var ea = new BasicDeliverEventArgs { Body = Encoding.UTF8.GetBytes("any message") };
+            var queueName = "queue.name";
+
+            // Act
+            rabbitMQMessageQueue.Invoke(body => { throw new Exception(); }, ea, _channel.Object, queueName);
+
+            // Arrange
+            // BasicPublish not virtual.
+            _channel.Verify(x => x.CreateBasicProperties(), Times.Once);
+        }
+
+        [Fact]
+        public void InvokeWithFalseResultShouldHitBasicPublish()
+        {
+            // Arrange
+            var rabbitMQMessageQueue = GetRabbitMQMessageQueue();
+            var ea = new BasicDeliverEventArgs { Body = Encoding.UTF8.GetBytes("any message") };
+            var queueName = "queue.name";
+
+            // Act
+            rabbitMQMessageQueue.Invoke(body => { return false; }, ea, _channel.Object, queueName);
+
+            // Arrange
+            // BasicPublish not virtual.
+            _channel.Verify(x => x.CreateBasicProperties(), Times.Once);
+        }
+
+        [Fact]
+        public void InvokeWithTrueResultShouldNotHitBasicPublish()
+        {
+            // Arrange
+            var rabbitMQMessageQueue = GetRabbitMQMessageQueue();
+            var ea = new BasicDeliverEventArgs { Body = Encoding.UTF8.GetBytes("any message") };
+            var queueName = "queue.name";
+
+            // Act
+            rabbitMQMessageQueue.Invoke(body => { return true; }, ea, _channel.Object, queueName);
+
+            // Arrange
+            // BasicPublish not virtual.
+            _channel.Verify(x => x.CreateBasicProperties(), Times.Never);
+        }
+
+        [Fact]
+        public void InvokeWithTrueResultShouldAllwaysHitBasicAck()
+        {
+            // Arrange
+            var rabbitMQMessageQueue = GetRabbitMQMessageQueue();
+
+            // Act
+            rabbitMQMessageQueue.Invoke(null, new BasicDeliverEventArgs(), _channel.Object, null);
+
+            // Arrange
+            _channel.Verify(x => x.BasicAck(It.IsAny<ulong>(), false), Times.Once);
+        }
+
+        [Fact]
+        public void SendWithValidParamsThanQueueBindArgumentExceptionShouldIngore()
+        {
+            // Arrange
+            var rabbitMQMessageQueue = GetRabbitMQMessageQueue();
+
+            _channel.Setup(x => x.QueueBind("queue.name", It.IsAny<string>(), 
+                "queue.name", null))
+                .Throws(new ArgumentException());
+
+            // Act
+            var result = rabbitMQMessageQueue.Send("queue.name", "message");
+
+            // Arrange
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void ReceiveWithValidParamsThanQueueBindArgumentExceptionShouldIngore()
+        {
+            // Arrange
+            var rabbitMQMessageQueue = GetRabbitMQMessageQueue();
+
+            _channelFactory.Setup(x => x.Channel).Returns(_channel.Object);
+            _channel.Setup(x => x.QueueBind(It.IsAny<string>(), It.IsAny<string>(), 
+                It.IsAny<string>(), null))
+                .Throws(new ArgumentException());
+
+            // Act
+            var result = rabbitMQMessageQueue.Receive("queue.name", body => { return true; });
+
+            // Arrange
+            Assert.True(result);
+        }
+
         private RabbitMQMessageQueue GetRabbitMQMessageQueue()
         {
             return new RabbitMQMessageQueue(
@@ -154,7 +249,6 @@ namespace Tossit.RabbitMQ.Tests
                 _jsonConverter.Object,
                 _channelFactory.Object,
                 _eventingBasicConsumerImpl.Object,
-                _consumerInvoker.Object,
                 _sendOptions.Object
             );
         }

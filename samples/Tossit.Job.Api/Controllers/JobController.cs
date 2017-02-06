@@ -22,18 +22,31 @@ namespace Tossit.Job.Api.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            var id = new Random().Next(0, 999);
+            var random = new Random().Next(0, 999);
 
-            // Dispatch job.
-            var isDispatched = _jobDispatcher.Dispatch(new FooJob
+            // Dispatch foo job.
+            _jobDispatcher.Dispatch(new FooJob
             {
                 Data = new FooData
                 {
-                    Id = id
+                    Id = random
                 }
             });
 
-            return new ObjectResult(new { Id = id, Message = "Yay! Job dispatched." });
+            // Dispatch bar job.
+            _jobDispatcher.Dispatch(new BarJob
+            {
+                Data = new BarData
+                {
+                    Name = $"bar:{random}"
+                }
+            });
+
+            return new ObjectResult(new
+            {
+                Id = random,
+                Message = "Yay! Foo and bar jobs dispatched."
+            });
         }
     }
 }

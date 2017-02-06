@@ -1,3 +1,5 @@
+using System;
+
 namespace Tossit.Core
 {
     /// <summary>
@@ -9,11 +11,19 @@ namespace Tossit.Core
         /// Default confirm receipt timeout as second. Value: 10 sec.
         /// </summary>
         private const int DEAFULT_CONFIRM_RECEIPT_TIMEOUT = 10;
+        /// <summary>
+        /// Default time as second for wait to retry.
+        /// </summary>
+        private const int DEAFULT_WAIT_TO_RETRY_SECONDS = 30;
 
         /// <summary>
         /// ConfirmReceiptTimeoutSeconds field.
         /// </summary>
         private int _confirmReceiptTimeoutSeconds;
+        /// <summary>
+        /// WaitToRetrySeconds field.
+        /// </summary>
+        private int _waitToRetrySeconds;
 
         /// <summary>
         /// Default 10 seconds. Wait until a dispatched data have been confirmed.
@@ -37,5 +47,24 @@ namespace Tossit.Core
         /// Default: true.
         /// </summary>
         public virtual bool ConfirmReceiptIsActive { get; set; } = true;
+
+        /// <summary>
+        /// Time as second for wait to retry.
+        /// Should be greater then zero.
+        /// Default: 30 seconds.
+        /// </summary>
+        public virtual int WaitToRetrySeconds
+        {
+            get
+            {
+                return _waitToRetrySeconds > 0 ? _waitToRetrySeconds : DEAFULT_WAIT_TO_RETRY_SECONDS;
+            }
+            set
+            {
+                if (value <= 0) throw new ArgumentException("WaitToRetrySeconds should be greater then zero.");
+
+                _waitToRetrySeconds = value;
+            }
+        }
     }
 }

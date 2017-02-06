@@ -28,7 +28,6 @@ namespace Tossit.RabbitMQ
             services.AddSingleton<IConnectionWrapper, ConnectionWrapper>();
             services.AddSingleton<IChannelFactory, ConsumerChannelFactory>();
 
-            services.AddScoped<IConsumerInvoker, ConsumerInvoker>();
             services.AddScoped<IEventingBasicConsumerImpl, EventingBasicConsumerImpl>();
         }
     }

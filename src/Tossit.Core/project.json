@@ -1,5 +1,23 @@
 {
   "version": "1.0.0-beta-*",
+  "authors": [
+    "Turgay Özgür"
+  ],
+  "copyright": "Copyright (c) 2017 Turgay Özgür",
+  "description": "Core library for tossit.",
+  "packOptions": {
+    "summary": "Core library for tossit.",
+    "tags": [
+      "tossit",
+      "core"
+    ],
+    "licenseUrl": "https://opensource.org/licenses/MIT",
+    "projectUrl": "https://github.com/turgayozgur/tossit",
+    "repository": {
+      "type": "git",
+      "url": "git://github.com/turgayozgur/tossit"
+    }
+  },
   "dependencies": {
     "Newtonsoft.Json": "9.0.1",
     "Microsoft.Extensions.DependencyModel": "1.1.0",
