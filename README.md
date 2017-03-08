@@ -47,7 +47,7 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerF
     app.UseTossitWorker();
 }
 ```
-## Job Useage ##
+## Job Usage ##
 Create a new class to sending to worker(s).
 ```csharp
 public class FooData
