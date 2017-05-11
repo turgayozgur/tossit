@@ -3,7 +3,6 @@
   <PropertyGroup>
     <Description>Library to disturbuted job/worker logic.</Description>
     <Copyright>Copyright (c) 2017 Turgay Özgür</Copyright>
-    <VersionPrefix>1.0.0-beta</VersionPrefix>
     <Authors>Turgay Özgür</Authors>
     <TargetFrameworks>net451;netstandard1.6</TargetFrameworks>
     <AssemblyName>Tossit.WorkQueue</AssemblyName>
