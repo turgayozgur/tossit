@@ -1,7 +1,7 @@
+#if !net451
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.Extensions.DependencyModel;
-
 
 namespace Tossit.Core
 {
@@ -25,3 +25,4 @@ namespace Tossit.Core
         }
     }
 }
+#endif

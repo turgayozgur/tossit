@@ -1,5 +1,7 @@
 using System;
+#if !net451
 using Microsoft.Extensions.Logging;
+#endif
 using Tossit.Core;
 using Tossit.WorkQueue.Job;
 
@@ -22,10 +24,12 @@ namespace Tossit.WorkQueue.Worker
         /// MessageQueue field.
         /// </summary>
         private readonly IMessageQueue _messageQueue;
+#if !net451
         /// <summary>
         /// Logger field.
         /// </summary>
         private readonly ILogger<WorkerRegistrar> _logger;
+#endif
 
         /// <summary>
         /// Ctor
@@ -33,16 +37,23 @@ namespace Tossit.WorkQueue.Worker
         /// <param name="jobNameValidator">IJobNameValidator</param>
         /// <param name="jsonConverter">IJsonConverter</param>
         /// <param name="messageQueue">IMessageQueue</param>
+#if !net451
         /// <param name="logger">ILogger{WorkerRegistrar}</param>
+#endif
         public WorkerRegistrar(IJobNameValidator jobNameValidator,
             IJsonConverter jsonConverter,
-            IMessageQueue messageQueue,
-            ILogger<WorkerRegistrar> logger)
+            IMessageQueue messageQueue
+#if !net451            
+            ,ILogger<WorkerRegistrar> logger
+#endif            
+            )
         {
             _jobNameValidator = jobNameValidator;
             _jsonConverter = jsonConverter;
             _messageQueue = messageQueue;
+#if !net451            
             _logger = logger;
+#endif
         }
 
         /// <summary>
@@ -66,24 +77,28 @@ namespace Tossit.WorkQueue.Worker
                 if (!result)
                 {
                     var message = $"Worker {worker.GetType().FullName} could not be registered.";
-
+#if !net451
                     _logger.LogError(message);
-
+#endif
                     return false;
                 }
             }
             catch (Exception ex)
             {
+#if !net451                
                 _logger.LogError(
                     new EventId(), 
                     ex, 
                     $"Worker {worker.GetType().FullName} registration failed. {ex.Message}");
+#endif
 
                 throw ex;
             }
 
+#if !net451
             _logger.LogInformation($"Worker {worker.GetType().FullName} successfully registered.");
-            
+#endif
+
             return true;
         }
 
