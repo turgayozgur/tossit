@@ -74,4 +74,4 @@ deploy:
       secure: qefqlrETZYZrgy/TM6+90NQF39w8iGfIBcaPTWuHnTMInufF3asIWP461G5WYkqI
     skip_symbols: true
     on:
-      branch: master
+      appveyor_repo_tag: true
