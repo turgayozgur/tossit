@@ -1,11 +1,8 @@
 #!/bin/bash
 set -e
 
-# variables
-revision=$APPVEYOR_BUILD_NUMBER
-
 # Version
-revision=$(printf %04d $revision)
+revision=$(printf %04d $APPVEYOR_BUILD_NUMBER)
 
 # pack
 for path in src/*; do
