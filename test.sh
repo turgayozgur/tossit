@@ -1,12 +1,12 @@
 #!/bin/bash
+set -e
 
 # variables
 target=${1:-local}
-projectFile="project.json"
 
 # run tests on local
 if [ "${target}" == "local" ]; then
-    for path in test/*/"${projectFile}"; do
+    for path in test/*/*.csproj; do
         dotnet test $path
     done
 fi
@@ -19,6 +19,6 @@ if [ "${target}" == "appveyor" ]; then
         -target:"C:\Program Files\dotnet\dotnet.exe" \
         -filter:"+[Tossit.*]* -[*.Tests]* -[*]*.Api.*" \
         -targetargs:"test ${path}" \
-        -mergeoutput -output:coverage.xml -register:user
+        -mergeoutput -output:"../../coverage.xml" -register:user
     done
 fi

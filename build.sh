@@ -1,17 +1,28 @@
 #!/bin/bash
-
-# variables
-srcFramework=$1
-projectFile="project.json"
-
-# restore all
-dotnet restore
+set -e
 
 # src
-[ ! -z "${srcFramework}" ] && dotnet build src/*/"${projectFile}" -f "${srcFramework}" || dotnet build src/*/"${projectFile}"
+for path in src/*/*.csproj;
+do
+    dotnet restore $path
+    dotnet build $path -f netstandard16
 
-# samples
-dotnet build samples/*/"${projectFile}"
+    # appveyor only:
+    [ $APPVEYOR ] \
+        && { dotnet build $path -f net451 -c Release; \
+             dotnet build $path -f netstandard16 -c Release; }
+done
 
 # test
-dotnet build test/*/"${projectFile}" --no-dependencies
+for path in test/*/*.csproj;
+do
+    dotnet restore $path
+    dotnet build $path --no-dependencies
+done
+
+# samples
+for path in samples/*/*.csproj;
+do
+    dotnet restore $path
+    dotnet build $path
+done

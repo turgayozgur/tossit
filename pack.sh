@@ -1,13 +1,13 @@
 #!/bin/bash
+set -e
 
 # variables
-revision=${1}
-projectFile="project.json"
+revision=$APPVEYOR_BUILD_NUMBER
 
 # Version
 revision=$(printf %04d $revision)
 
 # pack
 for path in src/*; do
-    dotnet pack ${path} -c Debug -o ./artifacts --version-suffix=$revision --no-build
+    dotnet pack ${path} -c Release -o ../../artifacts --version-suffix=$revision --no-build
 done
