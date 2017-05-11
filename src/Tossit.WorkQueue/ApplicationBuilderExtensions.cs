@@ -1,4 +1,3 @@
-#if !net451
 using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -54,4 +53,3 @@ namespace Tossit.WorkQueue
         }
     }
 }
-#endif

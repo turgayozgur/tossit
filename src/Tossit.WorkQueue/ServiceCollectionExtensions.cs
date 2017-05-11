@@ -1,4 +1,3 @@
-#if !net451
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Tossit.Core;
@@ -58,4 +57,3 @@ namespace Tossit.WorkQueue
         }
     }
 }
-#endif

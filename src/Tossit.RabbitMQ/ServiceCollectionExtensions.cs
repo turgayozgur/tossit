@@ -1,4 +1,3 @@
-#if !net451
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;
@@ -33,4 +32,3 @@ namespace Tossit.RabbitMQ
         }
     }
 }
-#endif

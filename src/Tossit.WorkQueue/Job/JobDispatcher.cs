@@ -1,8 +1,6 @@
 ﻿using System;
 using Tossit.Core;
-#if !net451
 using Microsoft.Extensions.Logging;
-#endif
 
 namespace Tossit.WorkQueue.Job
 {
@@ -23,12 +21,10 @@ namespace Tossit.WorkQueue.Job
         /// JsonConverter field.
         /// </summary>
         private readonly IJsonConverter _jsonConverter;
-#if !net451
         /// <summary>
         /// Logger field.
         /// </summary>
         private readonly ILogger<JobDispatcher> _logger;
-#endif
 
         /// <summary>
         /// Ctor
@@ -36,23 +32,16 @@ namespace Tossit.WorkQueue.Job
         /// <param name="jobNameValidator">IJobNameValidator</param>
         /// <param name="messageQueue">IMessageQueue</param>
         /// <param name="jsonConverter">IJsonConverter</param>
-#if !net451
         /// <param name="logger">ILogger{JobDispatcher}</param>
-#endif
         public JobDispatcher(IJobNameValidator jobNameValidator,
             IMessageQueue messageQueue,
-            IJsonConverter jsonConverter
-#if !net451
-            ,ILogger<JobDispatcher> logger
-#endif            
-            )
+            IJsonConverter jsonConverter,
+            ILogger<JobDispatcher> logger)
         {
             _jobNameValidator = jobNameValidator;
             _messageQueue = messageQueue;
             _jsonConverter = jsonConverter;
-#if !net451
             _logger = logger;
-#endif
         }
 
         /// <summary>
@@ -75,20 +64,19 @@ namespace Tossit.WorkQueue.Job
                 if (!result)
                 {
                     var message = $"Job {job.GetType().FullName} could not be dispatched.";
-#if !net451
+
                     _logger.LogError(message);
-#endif
+
                     return false;
                 }
             }
             catch (Exception ex)
             {
-#if !net451
                 _logger.LogError(
                     new EventId(), 
                     ex, 
                     $"Job {job.GetType().FullName} dispatching failed. {ex.Message}");
-#endif
+
                 throw ex;
             }
 

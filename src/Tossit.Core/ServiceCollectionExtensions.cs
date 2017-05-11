@@ -1,4 +1,3 @@
-#if !net451
 using System;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -24,4 +23,3 @@ namespace Tossit.Core
         }
     }
 }
-#endif

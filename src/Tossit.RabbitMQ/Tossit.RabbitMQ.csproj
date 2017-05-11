@@ -23,12 +23,9 @@
   <ItemGroup>
     <ProjectReference Include="../Tossit.Core/Tossit.Core.csproj" />
   </ItemGroup>
-
+  
   <ItemGroup>
     <PackageReference Include="RabbitMQ.Client" Version="5.0.0-pre2" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="1.1.1" />
