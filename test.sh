@@ -14,7 +14,7 @@ else
         -oldstyle \
         -target:"C:\Program Files\dotnet\dotnet.exe" \
         -filter:"+[Tossit.*]* -[*.Tests]* -[*]*.Api.*" \
-        -targetargs:"test ${path}" \
+        -targetargs:"test" \
         -mergeoutput -output:"..\\..\coverage.xml" -register:user)
     done
 fi
