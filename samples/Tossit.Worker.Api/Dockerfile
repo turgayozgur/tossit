@@ -4,7 +4,7 @@ COPY . /workerApp
 
 WORKDIR /workerApp
 
-RUN ["bash", "build.sh", "netstandard16"]
+RUN ["bash", "build.sh"]
 
 EXPOSE 5001/tcp
 

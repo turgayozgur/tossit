@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.Extensions.DependencyModel;
 
-
 namespace Tossit.Core
 {
     /// <summary>

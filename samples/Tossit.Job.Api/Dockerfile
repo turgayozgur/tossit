@@ -4,7 +4,7 @@ COPY . /jobApp
 
 WORKDIR /jobApp
 
-RUN ["bash", "build.sh", "netstandard16"]
+RUN ["bash", "build.sh"]
 
 EXPOSE 5000/tcp
 

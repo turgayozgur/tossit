@@ -74,16 +74,18 @@ namespace Tossit.WorkQueue.Worker
             }
             catch (Exception ex)
             {
+
                 _logger.LogError(
                     new EventId(), 
                     ex, 
                     $"Worker {worker.GetType().FullName} registration failed. {ex.Message}");
 
+
                 throw ex;
             }
 
             _logger.LogInformation($"Worker {worker.GetType().FullName} successfully registered.");
-            
+
             return true;
         }
 

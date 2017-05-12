@@ -25,7 +25,7 @@ environment:
 #---------------------------------#
 
 # build Configuration, i.e. Debug, Release, etc.
-configuration: Debug
+configuration: Relese
 
 # to run your custom scripts instead of automatic MSBuild
 build_script:
@@ -33,7 +33,7 @@ build_script:
 
 # scripts to run after build
 after_build:
-  - sh pack.sh %APPVEYOR_BUILD_NUMBER%
+  - sh pack.sh
 
 #---------------------------------#
 #       tests configuration       #
@@ -45,7 +45,7 @@ before_test:
 
 # to run your custom scripts instead of automatic tests
 test_script:
-  - sh test.sh appveyor
+  - sh test.sh
 
 # scripts to run after tests
 after_test:
