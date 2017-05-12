@@ -45,7 +45,7 @@ before_test:
 
 # to run your custom scripts instead of automatic tests
 test_script:
-  - sh test.sh appveyor
+  - sh test.sh
 
 # scripts to run after tests
 after_test:
