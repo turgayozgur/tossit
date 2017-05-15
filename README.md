@@ -8,7 +8,7 @@
 |:-------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------:|
 | [![Latest version](https://img.shields.io/nuget/v/Tossit.WorkQueue.svg)](https://www.nuget.org/packages/Tossit.WorkQueue) | [![Latest version](https://img.shields.io/nuget/v/Tossit.RabbitMQ.svg)](https://www.nuget.org/packages/Tossit.RabbitMQ) |
 
-Simple, easy to use library for disturbuted job/worker logic. Disturbuted messages handled by built in [RabbitMQ](https://github.com/rabbitmq/rabbitmq-dotnet-client) implementation.
+Simple, easy to use library for distributed job/worker logic. Distributed messages handled by built in [RabbitMQ](https://github.com/rabbitmq/rabbitmq-dotnet-client) implementation.
 ## Installation ##
 You need to install [Tossit.RabbitMQ](https://www.nuget.org/packages/Tossit.RabbitMQ) and [Tossit.WorkQueue](https://www.nuget.org/packages/Tossit.WorkQueue) nuget packages.
 ```
