@@ -7,7 +7,7 @@
     <TargetFrameworks>net451;netstandard1.6</TargetFrameworks>
     <AssemblyName>Tossit.WorkQueue</AssemblyName>
     <PackageId>Tossit.WorkQueue</PackageId>
-    <PackageTags>tossit;disturbuted;job;worker</PackageTags>
+    <PackageTags>tossit;distributed;job;worker</PackageTags>
     <PackageProjectUrl>https://github.com/turgayozgur/tossit</PackageProjectUrl>
     <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
