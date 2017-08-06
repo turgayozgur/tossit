@@ -42,7 +42,7 @@ namespace Tossit.Core
         }
 
         /// <summary>
-        /// True if u want to wait to successfully receive message from broker until timeout, otherwise should be false.
+        /// Set true if u want to wait to see the message received successfully from broker until timeout. Otherwise should be false.
         /// It is highly recommended to be true.
         /// Default: true.
         /// </summary>

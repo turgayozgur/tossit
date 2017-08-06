@@ -32,7 +32,11 @@ namespace Tossit.Job.Api
             services.AddRabbitMQ();
 
             // Add Tossit Job dependencies.
-            services.AddTossitJob();            
+            services.AddTossitJob(sendOptions => {
+                sendOptions.WaitToRetrySeconds = 30;
+                sendOptions.ConfirmReceiptIsActive = true;
+                sendOptions.ConfirmReceiptTimeoutSeconds = 10;
+            });            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

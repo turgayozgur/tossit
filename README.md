@@ -9,6 +9,12 @@
 | [![Latest version](https://img.shields.io/nuget/v/Tossit.WorkQueue.svg)](https://www.nuget.org/packages/Tossit.WorkQueue) | [![Latest version](https://img.shields.io/nuget/v/Tossit.RabbitMQ.svg)](https://www.nuget.org/packages/Tossit.RabbitMQ) |
 
 Simple, easy to use library for distributed job/worker logic. Distributed messages handled by built in [RabbitMQ](https://github.com/rabbitmq/rabbitmq-dotnet-client) implementation.
+## Highlights ##
+* Super easy way to use RabbitMQ .net client.
+* Connection and channel management.
+* Failure management.
+* Send and receive data that auto converted to your object types.
+* Recovery functionality. Do not worry about connection loses.
 ## Installation ##
 You need to install [Tossit.RabbitMQ](https://www.nuget.org/packages/Tossit.RabbitMQ) and [Tossit.WorkQueue](https://www.nuget.org/packages/Tossit.WorkQueue) nuget packages.
 ```
@@ -90,6 +96,27 @@ public class AnyController : Controller
 
         return Ok();
     }
+}
+```
+### Send Options ###
+* **WaitToRetrySeconds:** Time as second for wait to retry when job rejects or throws an error. Should be greater then zero. Default 30 seconds.
+
+* **ConfirmReceiptIsActive:** Set true if u want to wait to see the data received successfully from a worker until timeout. Otherwise can be false. It is highly recommended to be true. Default: true.
+
+* **ConfirmReceiptTimeoutSeconds**: Wait until a dispatched data have been confirmed. Default 10 seconds.
+```csharp
+public void ConfigureServices(IServiceCollection services)
+{
+    ...
+
+    // Add Tossit Job dependencies with options.
+    services.AddTossitJob(sendOptions => {
+        sendOptions.WaitToRetrySeconds = 30;
+        sendOptions.ConfirmReceiptIsActive = true;
+        sendOptions.ConfirmReceiptTimeoutSeconds = 10;
+    });
+
+    ...
 }
 ```
 ## Worker Usage ##
