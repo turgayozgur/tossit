@@ -1,3 +1,5 @@
+using System;
+using Microsoft.Extensions.Logging;
 using Moq;
 using RabbitMQ.Client;
 using Xunit;
@@ -8,6 +10,8 @@ namespace Tossit.RabbitMQ.Tests
     {
         private readonly Mock<IConnectionWrapper> _connectionWrapper;
         private readonly Mock<IConnection> _connection;
+        private readonly Mock<ILogger<ConsumerChannelFactory>> _logger;
+        private readonly Mock<IChannelRecovery> _channelRecovery;
 
         public ConsumerChannelFactoryTests()
         {
@@ -15,36 +19,41 @@ namespace Tossit.RabbitMQ.Tests
             _connection = new Mock<IConnection>();
 
             _connectionWrapper.Setup(x => x.ConsumerConnection).Returns(_connection.Object);
+
+            _logger = new Mock<ILogger<ConsumerChannelFactory>>();
+            _channelRecovery = new Mock<IChannelRecovery>();
         }
 
         [Fact]
         public void GetChannelShouldReturnAnyIChannel()
         {
             // Arrange
-            var consumerChannelFactory = new ConsumerChannelFactory(_connectionWrapper.Object);
+            var consumerChannelFactory = new ConsumerChannelFactory(_connectionWrapper.Object, _logger.Object, _channelRecovery.Object);
 
             var channel = new Mock<IModel>();
+            channel.Setup(x => x.IsOpen).Returns(true);
             _connection.Setup(x => x.CreateModel()).Returns(channel.Object);
 
             // Act
-            var resultChannel = consumerChannelFactory.Channel;
-
             // Assert
-            Assert.True(resultChannel == channel.Object);
+            consumerChannelFactory.Channel(chn => {
+                Assert.True(chn == channel.Object);
+            });            
         }
 
         [Fact]
         public void DisposeShouldHitChannelDispose()
         {
             // Arrange
-            var consumerChannelFactory = new ConsumerChannelFactory(_connectionWrapper.Object);
+            var consumerChannelFactory = new ConsumerChannelFactory(_connectionWrapper.Object, _logger.Object, _channelRecovery.Object);
             
             var channel = new Mock<IModel>();
+            channel.Setup(x => x.IsOpen).Returns(true);
             _connection.Setup(x => x.CreateModel()).Returns(channel.Object);
 
             // Act
-            var channel1 = consumerChannelFactory.Channel;
-            var channel2 = consumerChannelFactory.Channel;
+            consumerChannelFactory.Channel(chn => {});
+            consumerChannelFactory.Channel(chn => {});
             consumerChannelFactory.Dispose();
 
             // Assert

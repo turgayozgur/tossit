@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -46,6 +47,10 @@ namespace Tossit.RabbitMQ
         /// SendOptions field.
         /// </summary>
         private readonly IOptions<SendOptions> _sendOptions;
+        /// <summary>
+        /// Logger field.
+        /// </summary>
+        private readonly ILogger<RabbitMQMessageQueue> _logger;
 
         /// <summary>
         /// Ctor
@@ -55,18 +60,21 @@ namespace Tossit.RabbitMQ
         /// <param name="channelFactory">IChannelFactory</param>
         /// <param name="eventingBasicConsumerImpl">IEventingBasicConsumerImpl</param>
         /// <param name="sendOptions">IOptions{SendOptions}</param>
+        /// <param name="logger">ILogger{RabbitMQMessageQueue}</param>
         public RabbitMQMessageQueue(
             IConnectionWrapper connectionWrapper,
             IJsonConverter jsonConverter,
             IChannelFactory channelFactory,
             IEventingBasicConsumerImpl eventingBasicConsumerImpl,
-            IOptions<SendOptions> sendOptions)
+            IOptions<SendOptions> sendOptions,
+            ILogger<RabbitMQMessageQueue> logger)
         {
             _connectionWrapper = connectionWrapper;
             _jsonConverter = jsonConverter;
             _channelFactory = channelFactory;
             _eventingBasicConsumerImpl = eventingBasicConsumerImpl;
             _sendOptions = sendOptions;
+            _logger = logger;
         }
 
         /// <summary>
@@ -111,6 +119,7 @@ namespace Tossit.RabbitMQ
                 }
             }
 
+            _logger.LogInformation($"Message sent to {name}.");
             return true;
         }
 
@@ -127,26 +136,27 @@ namespace Tossit.RabbitMQ
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
             if (func == null) throw new ArgumentNullException(nameof(func));
 
-            // Get new channel.
-            var channel = _channelFactory.Channel;
+            // Get new channel and connect receiver to it.
+            _channelFactory.Channel(channel =>
+            {
+                // Prepare channel to consume messages and retry.
+                var queueName = name;
+                // To consume.
+                var exchangeName = PrepareChannel(channel, queueName);
+                // To retry.
+                PrepareChannelForRetry(channel, queueName, exchangeName);
 
-            // Prepare channel to consume messages and retry.
-            var queueName = name;
-            // To consume.
-            var exchangeName = PrepareChannel(channel, queueName);
-            // To retry.
-            PrepareChannelForRetry(channel, queueName, exchangeName);
+                channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
-            channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
+                // Create new consumer.
+                var consumer = _eventingBasicConsumerImpl.GetEventingBasicConsumer(channel);
 
-            // Create new consumer.
-            var consumer = _eventingBasicConsumerImpl.GetEventingBasicConsumer(channel);
+                // Register to job received event.
+                consumer.Received += (model, ea) => { this.Invoke(func, ea, channel, queueName); };
 
-            // Register to job received event.
-            consumer.Received += (model, ea) => { this.Invoke(func, ea, channel, queueName); };
-
-            // Start consuming.
-            channel.BasicConsume(queueName, autoAck: false, consumer: consumer);
+                // Start consuming.
+                channel.BasicConsume(queueName, autoAck: false, consumer: consumer);
+            });
 
             return true;
         }
@@ -161,7 +171,7 @@ namespace Tossit.RabbitMQ
         {
             // Declare main exchange and queue.
             channel.ExchangeDeclare(MAIN_EXCHANGE_NAME, ExchangeType.Direct, true, false);
-            channel.QueueDeclare(queueName, durable: true, exclusive: false, autoDelete: false);            
+            channel.QueueDeclare(queueName, durable: true, exclusive: false, autoDelete: false);
 
             // Bind queue to main exchange if did not binded before.
             try
@@ -196,13 +206,13 @@ namespace Tossit.RabbitMQ
             };
 
             // Declare queue to store messages for waiting to retry.
-            channel.QueueDeclare($"{queueName}.{RETRY_QUEUE_NAME_SUFFIX}", durable: true, exclusive: false, 
+            channel.QueueDeclare($"{queueName}.{RETRY_QUEUE_NAME_SUFFIX}", durable: true, exclusive: false,
                 autoDelete: false, arguments: args);
-            
+
             // Bind retry queue to retry exchange if did not binded before.
             try
             {
-                channel.QueueBind($"{queueName}.{RETRY_QUEUE_NAME_SUFFIX}", MAIN_RETRY_EXCHANGE_NAME, 
+                channel.QueueBind($"{queueName}.{RETRY_QUEUE_NAME_SUFFIX}", MAIN_RETRY_EXCHANGE_NAME,
                     routingKey: queueName);
             }
             catch (ArgumentException)
@@ -231,10 +241,12 @@ namespace Tossit.RabbitMQ
             try
             {
                 isSuccess = func(body);
+                _logger.LogInformation($"Message received successfully from {queueName}.");
             }
-            catch
+            catch (Exception ex)
             {
                 isSuccess = false;
+                _logger.LogError(new EventId(), ex, $"Message could not received from {queueName}.");
             }
 
             // Success or not, doesn't matter. 
@@ -248,7 +260,7 @@ namespace Tossit.RabbitMQ
                 properties.Persistent = true;
 
                 // Publish to retry queue to retry again after ttl.
-                channel.BasicPublish(exchange: MAIN_RETRY_EXCHANGE_NAME, routingKey: queueName, 
+                channel.BasicPublish(exchange: MAIN_RETRY_EXCHANGE_NAME, routingKey: queueName,
                     basicProperties: properties, body: ea.Body);
             }
         }

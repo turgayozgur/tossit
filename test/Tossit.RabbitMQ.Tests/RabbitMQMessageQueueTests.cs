@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using RabbitMQ.Client;
@@ -19,6 +20,7 @@ namespace Tossit.RabbitMQ.Tests
         private readonly Mock<IJsonConverter> _jsonConverter;
         private readonly Mock<IModel> _channel;
         private readonly Mock<IOptions<SendOptions>> _sendOptions;
+        private readonly Mock<ILogger<RabbitMQMessageQueue>> _logger;
 
         public RabbitMQMessageQueueTests()
         {
@@ -27,7 +29,6 @@ namespace Tossit.RabbitMQ.Tests
             _connectionWrapper.Setup(x => x.ConsumerConnection).Returns(Mock.Of<IConnection>());
 
             _channelFactory = new Mock<IChannelFactory>();
-            _channelFactory.Setup(x => x.Channel).Returns(Mock.Of<IModel>());
 
             _channel = new Mock<IModel>();
             _channel.Setup(x => x.CreateBasicProperties()).Returns(Mock.Of<IBasicProperties>());
@@ -44,6 +45,8 @@ namespace Tossit.RabbitMQ.Tests
             _sendOptions = new Mock<IOptions<SendOptions>>();
             _sendOptions.Setup(x => x.Value.ConfirmReceiptTimeoutSeconds).Returns(It.IsAny<int>());
             _sendOptions.Setup(x => x.Value.ConfirmReceiptIsActive).Returns(false);
+
+            _logger = new Mock<ILogger<RabbitMQMessageQueue>>();
         }
 
         [Fact]
@@ -230,7 +233,6 @@ namespace Tossit.RabbitMQ.Tests
             // Arrange
             var rabbitMQMessageQueue = GetRabbitMQMessageQueue();
 
-            _channelFactory.Setup(x => x.Channel).Returns(_channel.Object);
             _channel.Setup(x => x.QueueBind(It.IsAny<string>(), It.IsAny<string>(), 
                 It.IsAny<string>(), null))
                 .Throws(new ArgumentException());
@@ -249,7 +251,8 @@ namespace Tossit.RabbitMQ.Tests
                 _jsonConverter.Object,
                 _channelFactory.Object,
                 _eventingBasicConsumerImpl.Object,
-                _sendOptions.Object
+                _sendOptions.Object,
+                _logger.Object
             );
         }
     }

@@ -9,8 +9,10 @@ namespace Tossit.RabbitMQ
     public interface IChannelFactory : IDisposable
     {
         /// <summary>
-        /// Get new RabbitMQ channel for every call.
+        /// Get new RabbitMQ channel from ConsumerConnection for every call. TODO: comment for action.
         /// </summary>
-        IModel Channel { get; }
+        /// <param name="action">The action for the using that newly created channel.
+        /// Also, this action will be calling, if the connection is reestablished after the unexpected closure.</param>
+        void Channel(Action<IModel> action);
     }
 }

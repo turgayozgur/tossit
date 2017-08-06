@@ -45,7 +45,7 @@ namespace Tossit.RabbitMQ
                 var connectionFactory = ((ConnectionFactory)service);
 
                 // Set RabbitMQ server uri.
-                connectionFactory.SetUri(new Uri(uri));
+                connectionFactory.Uri = new Uri(uri);
 
                 // The automatic recovery process for many applications follows the following steps:
                 // Reconnect, Restore connection listeners,

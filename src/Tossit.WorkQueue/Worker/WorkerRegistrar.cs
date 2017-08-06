@@ -65,27 +65,20 @@ namespace Tossit.WorkQueue.Worker
                 // Log, if could not be registerd.
                 if (!result)
                 {
-                    var message = $"Worker {worker.GetType().FullName} could not be registered.";
-
-                    _logger.LogError(message);
-
+                    _logger.LogError($"Worker {worker.JobName} could not be registered.");
                     return false;
                 }
             }
             catch (Exception ex)
             {
-
                 _logger.LogError(
                     new EventId(), 
                     ex, 
-                    $"Worker {worker.GetType().FullName} registration failed. {ex.Message}");
-
-
+                    $"Worker {worker.JobName} registration failed. {ex.Message}");
                 throw ex;
             }
 
-            _logger.LogInformation($"Worker {worker.GetType().FullName} successfully registered.");
-
+            _logger.LogInformation($"Worker {worker.JobName} successfully registered.");
             return true;
         }
 

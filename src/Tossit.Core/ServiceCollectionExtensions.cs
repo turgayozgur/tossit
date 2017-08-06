@@ -19,7 +19,8 @@ namespace Tossit.Core
 
             services.AddScoped<IJsonConverter, JsonConverter>();
             services.AddScoped<IDependencyContextProxy, DependencyContextProxy>();
-            services.AddSingleton<IReflectionHelper, ReflectionHelper>();            
+            services.AddSingleton<IReflectionHelper, ReflectionHelper>();
+            services.AddSingleton<ITimeLoop, TimeLoop>();            
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 
 namespace Tossit.RabbitMQ
@@ -17,24 +18,51 @@ namespace Tossit.RabbitMQ
         /// Lazy ConsumerConnection field.
         /// </summary>
         private readonly Lazy<IConnection> _consumerConnection;
+        /// <summary>
+        /// Logger field.
+        /// </summary>
+        private readonly ILogger<ConnectionWrapper> _logger;
 
         /// <summary>
-        /// ProducerConnection property.
+        /// ProducerConnection property. Thread safe.
         /// </summary>
-        public IConnection ProducerConnection => _producerConnection.Value;
+        public IConnection ProducerConnection
+        {
+            get
+            {
+                var cnn = _producerConnection.Value;
+                lock (cnn)
+                {
+                    return cnn;
+                }
+            }
+        }
         /// <summary>
-        /// ConsumerConnection property.
+        /// ConsumerConnection property. Thread safe.
         /// </summary>
-        public IConnection ConsumerConnection => _consumerConnection.Value;
+        public IConnection ConsumerConnection
+        {
+            get
+            {
+                var cnn = _consumerConnection.Value;
+                lock (cnn)
+                {
+                    return cnn;
+                }
+            }
+        }
 
         /// <summary>
         /// Ctor
         /// </summary>
         /// <param name="connectionFactory">IConnectionFactory</param>
-        public ConnectionWrapper(IConnectionFactory connectionFactory)
+        /// <param name="logger">ILogger{ConnectionWrapper}</param>
+        public ConnectionWrapper(IConnectionFactory connectionFactory,
+            ILogger<ConnectionWrapper> logger)
         {
             _producerConnection = new Lazy<IConnection>(connectionFactory.CreateConnection);
             _consumerConnection = new Lazy<IConnection>(connectionFactory.CreateConnection);
+            _logger = logger;
         }
 
         /// <summary>
@@ -42,8 +70,17 @@ namespace Tossit.RabbitMQ
         /// </summary>
         public void Dispose()
         {
-            if (_producerConnection.IsValueCreated) ProducerConnection.Close();
-            if (_consumerConnection.IsValueCreated) ConsumerConnection.Close();
+            if (_producerConnection.IsValueCreated  && ProducerConnection.IsOpen)
+            {
+                ProducerConnection.Close();
+                _logger.LogInformation("Producer connection closed.");
+            }
+
+            if (_consumerConnection.IsValueCreated && ConsumerConnection.IsOpen)
+            {
+                ConsumerConnection.Close();
+                _logger.LogInformation("Consumer connection closed.");
+            }
         }
     }
 }
