@@ -10,7 +10,7 @@
 
 Simple, easy to use library for distributed job/worker logic. Distributed messages handled by built in [RabbitMQ](https://github.com/rabbitmq/rabbitmq-dotnet-client) implementation.
 ## Highlights ##
-* Super easy way to use RabbitMQ .net client.
+* Super easy way to use RabbitMQ .net client for job/worker logic.
 * Connection and channel management.
 * Failure management.
 * Send and receive data that auto converted to your object types.
