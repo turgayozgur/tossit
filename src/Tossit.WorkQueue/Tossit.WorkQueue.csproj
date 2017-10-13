@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <Version>1.0.1</Version>
     <Description>Library to disturbuted job/worker logic.</Description>
     <Copyright>Copyright (c) 2017 Turgay Özgür</Copyright>
     <Authors>Turgay Özgür</Authors>
