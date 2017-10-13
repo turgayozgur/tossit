@@ -20,7 +20,7 @@ namespace Tossit.RabbitMQ
             if (services == null) throw new ArgumentNullException(nameof(services));
 
             // RabbitMQ
-            services.AddScoped<IConnectionFactory, ConnectionFactory>();
+            services.AddSingleton<IConnectionFactory, ConnectionFactory>();
 
             // Tossit.RabbitMQ
             services.AddSingleton<IMessageQueue, RabbitMQMessageQueue>();
