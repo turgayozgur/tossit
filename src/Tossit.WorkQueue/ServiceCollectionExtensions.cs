@@ -44,7 +44,7 @@ namespace Tossit.WorkQueue
 
             // Tossit.WorkQueue.Worker
             services.AddScoped<IJobNameValidator, JobNameValidator>();
-            services.AddSingleton<IWorkerRegistrar, WorkerRegistrar>();
+            services.AddScoped<IWorkerRegistrar, WorkerRegistrar>();
 
             // Add workers as singleton.
             var workerTypes = new ReflectionHelper(new DependencyContextProxy())

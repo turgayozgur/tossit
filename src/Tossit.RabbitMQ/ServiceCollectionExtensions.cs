@@ -23,7 +23,7 @@ namespace Tossit.RabbitMQ
             services.AddSingleton<IConnectionFactory, ConnectionFactory>();
 
             // Tossit.RabbitMQ
-            services.AddSingleton<IMessageQueue, RabbitMQMessageQueue>();
+            services.AddScoped<IMessageQueue, RabbitMQMessageQueue>();
 
             services.AddSingleton<IConnectionWrapper, ConnectionWrapper>();
             services.AddSingleton<IChannelFactory, ConsumerChannelFactory>();
