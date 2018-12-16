@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>1.0.2</Version>
+    <Version>2.0.0</Version>
     <Description>Library to disturbuted job/worker logic.</Description>
     <Copyright>Copyright (c) 2017 Turgay Özgür</Copyright>
     <Authors>Turgay Özgür</Authors>
-    <TargetFrameworks>net451;netstandard1.6</TargetFrameworks>
+    <TargetFrameworks>net451;netstandard2.0</TargetFrameworks>
     <AssemblyName>Tossit.WorkQueue</AssemblyName>
     <PackageId>Tossit.WorkQueue</PackageId>
     <PackageTags>tossit;distributed;job;worker</PackageTags>
@@ -13,22 +13,10 @@
     <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>git://github.com/turgayozgur/tossit</RepositoryUrl>
-    <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.6' ">1.6.1</NetStandardImplicitPackageVersion>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-   <DebugType>full</DebugType>
-   <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="../Tossit.Core/Tossit.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="1.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="1.1.1" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">

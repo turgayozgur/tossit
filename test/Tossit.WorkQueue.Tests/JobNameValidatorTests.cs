@@ -44,7 +44,7 @@ namespace Tossit.WorkQueue.Tests
 
             // Act
             // Assert
-            Assert.Throws(typeof(Exception), () => { jobNameValidator.Validate(jobName); });
+            Assert.Throws<Exception>(() => { jobNameValidator.Validate(jobName); });
         }
     }
 }

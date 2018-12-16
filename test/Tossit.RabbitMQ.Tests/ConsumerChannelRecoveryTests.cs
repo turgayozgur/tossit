@@ -2,6 +2,7 @@ using System;
 using Microsoft.Extensions.Logging;
 using Moq;
 using RabbitMQ.Client;
+using Tossit.Core;
 using Xunit;
 
 namespace Tossit.RabbitMQ.Tests
@@ -27,7 +28,7 @@ namespace Tossit.RabbitMQ.Tests
             consumerChannelRecovery.Attempt(_fixture.Channel.Object, channel => { isActionCalled = true; });
 
             // Assert
-            Assert.Equal(false, isActionCalled);
+            Assert.False(isActionCalled);
         }
 
         [Fact]
@@ -43,7 +44,7 @@ namespace Tossit.RabbitMQ.Tests
             consumerChannelRecovery.Attempt(_fixture.Channel.Object, channel => { isActionCalled = true; });
 
             // Assert
-            Assert.Equal(false, isActionCalled);
+            Assert.False(isActionCalled);
         }
 
         [Fact]
@@ -59,7 +60,7 @@ namespace Tossit.RabbitMQ.Tests
             consumerChannelRecovery.Attempt(_fixture.Channel.Object, channel => { isActionCalled = true; });
 
             // Assert
-            Assert.Equal(true, isActionCalled);
+            Assert.True(isActionCalled);
         }
     }
 

@@ -1,16 +1,15 @@
 #!/bin/bash
 set -e
 
+dotnet restore
+
 # src
 for path in src/*/*.csproj;
 do
-    dotnet restore $path
-    dotnet build $path -f netstandard1.6
-
-    # appveyor only:
     [ $APPVEYOR ] \
-        && { dotnet build $path -f net451 -c Release; \
-             dotnet build $path -f netstandard1.6 -c Release; }
+        && { dotnet build $path --no-restore -f net451 -c Release; \
+             dotnet build $path --no-restore -f netstandard2.0 -c Release; } \
+        || dotnet build $path --no-restore -f netstandard2.0
 done
 
 # test

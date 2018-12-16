@@ -29,7 +29,7 @@ namespace Tossit.Core.Tests
             var result = reflectionHelper.GetTypesThatImplementedByInterface(typeof(IBarInterface<>));
 
             // Assert
-            Assert.True(result.All(x => x is IBarInterface<string>));
+            Assert.True(result.All(x => false));
         }
 
         [Fact]
@@ -69,8 +69,7 @@ namespace Tossit.Core.Tests
             var parameter = new FooClass { Data = "test" };
 
             // Assert
-            Assert.Throws(typeof(InvalidOperationException),
-                () => reflectionHelper.InvokeGenericMethod("FailMethod", barClass, parameter, typeof(IBarInterface<>)));
+            Assert.Throws<InvalidOperationException>(() => reflectionHelper.InvokeGenericMethod("FailMethod", barClass, parameter, typeof(IBarInterface<>)));
         }
 
         [Fact]
@@ -82,8 +81,7 @@ namespace Tossit.Core.Tests
             var parameter = new FooClass { Data = "test" };
 
             // Assert
-            Assert.Throws(typeof(InvalidOperationException),
-                () => reflectionHelper.InvokeGenericMethod("BarMethod", barClass, parameter, typeof(IBarInterface<string>)));
+            Assert.Throws<InvalidOperationException>(() => reflectionHelper.InvokeGenericMethod("BarMethod", barClass, parameter, typeof(IBarInterface<string>)));
         }
 
         [Fact]
@@ -95,8 +93,7 @@ namespace Tossit.Core.Tests
             var parameter = new FooClass { Data = "test" };
 
             // Assert
-            Assert.Throws(typeof(ArgumentNullException),
-                () => reflectionHelper.InvokeGenericMethod(string.Empty, barClass, parameter, typeof(IBarInterface<>)));
+            Assert.Throws<ArgumentNullException>(() => reflectionHelper.InvokeGenericMethod(string.Empty, barClass, parameter, typeof(IBarInterface<>)));
         }
 
         [Fact]
@@ -107,8 +104,7 @@ namespace Tossit.Core.Tests
             var parameter = new FooClass { Data = "test" };
 
             // Assert
-            Assert.Throws(typeof(ArgumentNullException),
-                () => reflectionHelper.InvokeGenericMethod("BarMethod", null, parameter, typeof(IBarInterface<>)));
+            Assert.Throws<ArgumentNullException>(() => reflectionHelper.InvokeGenericMethod("BarMethod", null, parameter, typeof(IBarInterface<>)));
         }
 
         [Fact]
@@ -119,8 +115,7 @@ namespace Tossit.Core.Tests
             var barClass = new BarClass();
 
             // Assert
-            Assert.Throws(typeof(ArgumentNullException),
-                () => reflectionHelper.InvokeGenericMethod("BarMethod", barClass, null, typeof(IBarInterface<>)));
+            Assert.Throws<ArgumentNullException>(() => reflectionHelper.InvokeGenericMethod("BarMethod", barClass, null, typeof(IBarInterface<>)));
         }
 
         [Fact]
@@ -132,8 +127,7 @@ namespace Tossit.Core.Tests
             var parameter = new FooClass { Data = "test" };
 
             // Assert
-            Assert.Throws(typeof(ArgumentNullException),
-                () => reflectionHelper.InvokeGenericMethod("BarMethod", barClass, parameter, null));
+            Assert.Throws<ArgumentNullException>(() => reflectionHelper.InvokeGenericMethod("BarMethod", barClass, parameter, null));
         }
 
         [Fact]
@@ -166,7 +160,7 @@ namespace Tossit.Core.Tests
             }, typeof(IBarInterface<string>));
 
             // Assert
-            Assert.True(result.Count() == 0);
+            Assert.True(!result.Any());
         }
 
         [Fact]
@@ -176,8 +170,7 @@ namespace Tossit.Core.Tests
             var reflectionHelper = GetReflectionHelper();
 
             // Assert
-            Assert.Throws(typeof(ArgumentNullException),
-                () => reflectionHelper.FilterObjectsByInterface<string>(null, typeof(void)));
+            Assert.Throws<ArgumentNullException>(() => reflectionHelper.FilterObjectsByInterface<string>(null, typeof(void)));
         }
 
         [Fact]

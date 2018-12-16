@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
+using Tossit.Core;
 
 namespace Tossit.RabbitMQ
 {

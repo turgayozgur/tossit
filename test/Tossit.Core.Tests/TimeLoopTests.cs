@@ -26,7 +26,7 @@ namespace Tossit.Core.Tests
 
             // Act
             // Assert
-            Assert.Throws(typeof(ArgumentNullException), () => { timeLoop.StartNew(null, 10); });
+            Assert.Throws<ArgumentNullException>(() => { timeLoop.StartNew(null, 10); });
         }
 
         [Theory]
@@ -39,7 +39,7 @@ namespace Tossit.Core.Tests
 
             // Act
             // Assert
-            Assert.Throws(typeof(ArgumentException), () => { timeLoop.StartNew(id => { }, period); });
+            Assert.Throws<ArgumentException>(() => { timeLoop.StartNew(id => { }, period); });
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace Tossit.Core.Tests
             var result = timeLoop.Stop(loopId);
 
             // Assert
-            Assert.Equal(true, result);
+            Assert.True(result);
         }
 
         [Fact]
@@ -66,7 +66,7 @@ namespace Tossit.Core.Tests
             var result = timeLoop.Stop(Guid.Empty);
 
             // Assert
-            Assert.Equal(false, result);
+            Assert.False(result);
         }
     }
 }

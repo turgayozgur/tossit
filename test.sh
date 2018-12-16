@@ -4,7 +4,7 @@ set -e
 # run tests on local
 if [ ! $APPVEYOR ]; then
     for path in test/*/*.csproj; do
-        dotnet test $path
+        dotnet test $path --no-restore --no-build
     done
 else
     # run tests on appveyor
@@ -14,7 +14,7 @@ else
         -oldstyle \
         -target:"C:\Program Files\dotnet\dotnet.exe" \
         -filter:"+[Tossit.*]* -[*.Tests]* -[*]*.Api.*" \
-        -targetargs:"test -c Debug" \
+        -targetargs:"test --no-restore --no-build -c Release" \
         -mergeoutput -output:"..\\..\coverage.xml" -register:user)
     done
 fi

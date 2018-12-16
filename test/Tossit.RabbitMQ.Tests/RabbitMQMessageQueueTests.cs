@@ -158,7 +158,7 @@ namespace Tossit.RabbitMQ.Tests
             var queueName = "queue.name";
 
             // Act
-            rabbitMQMessageQueue.Invoke(body => { throw new Exception(); }, ea, _channel.Object, queueName);
+            rabbitMQMessageQueue.Invoke(body => throw new Exception(), ea, _channel.Object, queueName);
 
             // Arrange
             // BasicPublish not virtual.
