@@ -270,6 +270,5 @@ __pycache__/
 # By tossit
 .vscode
 .vs
-*.sln
 *.xproj
 *.sln.DotSettings
