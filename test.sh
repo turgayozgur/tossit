@@ -3,9 +3,7 @@ set -e
 
 # run tests on local
 if [ ! $APPVEYOR ]; then
-    for path in test/*/*.csproj; do
-        dotnet test $path --no-restore --no-build
-    done
+    dotnet test --no-restore --no-build
 else
     # run tests on appveyor
     for path in test/*; do

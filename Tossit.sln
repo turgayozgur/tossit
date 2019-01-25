@@ -1,5 +1,7 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26124.0
+MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{464FBEF5-04C9-4E2C-95DB-66B8732AF1EF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tossit.Core", "src\Tossit.Core\Tossit.Core.csproj", "{04DB4957-6E52-4F4D-95AA-CF341F82ABBC}"
@@ -25,8 +27,15 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
+        Debug|x64 = Debug|x64
+        Debug|x86 = Debug|x86
+        Release|Any CPU = Release|Any CPU
+        Release|x64 = Release|x64
+        Release|x86 = Release|x86
 	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+        HideSolutionNode = FALSE
+    EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{04DB4957-6E52-4F4D-95AA-CF341F82ABBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{04DB4957-6E52-4F4D-95AA-CF341F82ABBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
