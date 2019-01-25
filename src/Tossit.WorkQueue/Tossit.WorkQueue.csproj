@@ -10,9 +10,12 @@
     <PackageId>Tossit.WorkQueue</PackageId>
     <PackageTags>tossit;distributed;job;worker</PackageTags>
     <PackageProjectUrl>https://github.com/turgayozgur/tossit</PackageProjectUrl>
-    <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>git://github.com/turgayozgur/tossit</RepositoryUrl>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
