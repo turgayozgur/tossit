@@ -1,12 +1,9 @@
 # Tossit #
+[![Latest version](https://img.shields.io/nuget/v/Tossit.RabbitMQ.svg)](https://www.nuget.org/packages/Tossit.RabbitMQ)
 [![Build Status](https://travis-ci.org/turgayozgur/tossit.svg?branch=master)](https://travis-ci.org/turgayozgur/tossit)
 [![Build status](https://ci.appveyor.com/api/projects/status/whuoamx1tb19jbn6/branch/master?svg=true)](https://ci.appveyor.com/project/turgayozgur/tossit/branch/master)
 [![codecov](https://codecov.io/gh/turgayozgur/tossit/branch/master/graph/badge.svg)](https://codecov.io/gh/turgayozgur/tossit)
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/tossitchat/Lobby)
-
-| Tossit.WorkQueue | Tossit.RabbitMQ |
-|:-------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------:|
-| [![Latest version](https://img.shields.io/nuget/v/Tossit.WorkQueue.svg)](https://www.nuget.org/packages/Tossit.WorkQueue) | [![Latest version](https://img.shields.io/nuget/v/Tossit.RabbitMQ.svg)](https://www.nuget.org/packages/Tossit.RabbitMQ) |
 
 Simple, easy to use library for distributed job/worker logic. Distributed messages handled by built in [RabbitMQ](https://github.com/rabbitmq/rabbitmq-dotnet-client) implementation.
 ## Highlights ##
@@ -16,10 +13,9 @@ Simple, easy to use library for distributed job/worker logic. Distributed messag
 * Send and receive data that auto converted to your object types.
 * Recovery functionality. Do not worry about connection loses.
 ## Installation ##
-You need to install [Tossit.RabbitMQ](https://www.nuget.org/packages/Tossit.RabbitMQ) and [Tossit.WorkQueue](https://www.nuget.org/packages/Tossit.WorkQueue) nuget packages.
+You need to install [Tossit.RabbitMQ](https://www.nuget.org/packages/Tossit.RabbitMQ) nuget package.
 ```
 PM> Install-Package Tossit.RabbitMQ
-PM> Install-Package Tossit.WorkQueue
 ```
 Use ConfigureServices method on startup to register services.
 ```csharp
