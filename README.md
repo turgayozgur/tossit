@@ -1,4 +1,7 @@
 # Tossit #
+
+This repository is archived. Please refer to ÇiçekSepeti’s [Eventransit](https://github.com/ciceksepetitech/eventransit) as its successor.
+
 [![Latest version](https://img.shields.io/nuget/v/Tossit.RabbitMQ.svg)](https://www.nuget.org/packages/Tossit.RabbitMQ)
 [![Build Status](https://travis-ci.org/turgayozgur/tossit.svg?branch=master)](https://travis-ci.org/turgayozgur/tossit)
 [![Build status](https://ci.appveyor.com/api/projects/status/whuoamx1tb19jbn6/branch/master?svg=true)](https://ci.appveyor.com/project/turgayozgur/tossit/branch/master)
